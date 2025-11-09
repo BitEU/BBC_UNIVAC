@@ -1,142 +1,145 @@
-# BBC Baseball Simulation and Demonstrator
+# BBC BASEBALL SIMULATION AND DEMONSTRATOR
+## INSTRUCTION MANUAL
 
-A modern C implementation of Paul R. Burgeson's 1961 baseball simulation game, originally written for the IBM 1620 computer. This version has been rewritten for Windows console (conhost terminal) and compiles with Microsoft Visual C++ (MSVC).
+### CONGRATULATIONS!
 
-## About the Original Game
+You are now the proud owner of the BBC (Burgeson Baseball Computer) Baseball Simulation, one of the earliest computer baseball games ever created. Originally programmed in 1961 for the IBM 1620 computer by Paul R. Burgeson of Youngstown, Ohio, this game has been faithfully recreated for your Windows computer.
 
-The BBC (Burgeson Baseball Computer) Baseball Simulation was created in 1961 to demonstrate the simulation capabilities of early computers. The program allows a human player to compete against the computer by selecting all-star baseball teams from a roster of 90 legendary players, each represented by their best season statistics.
+### GAME OVERVIEW
 
-**Original Author**: Paul R. Burgeson, Youngstown, Ohio  
-**Original Date**: January 1961  
-**Original Platform**: IBM 1620 (20K memory)  
-**Original Language**: Machine code
+BBC Baseball puts you in command of an all-star lineup featuring 90 of baseball's greatest legends from 1884 to 1953. Select your dream team and compete against the computer in a full nine-inning game. Will your strategic choices lead to victory, or will the computer's random selections prove superior?
 
-## Features
+**ORIGINAL SPECIFICATIONS**
+- Author: Paul R. Burgeson
+- Release Date: January 1961
+- Original System: IBM 1620 (20,000 digits of memory)
+- Programming Language: Machine code
+- This Version: Microsoft Visual C++ for Windows
 
-- **90 All-Star Players**: Historical baseball legends from 1884-1953
-- **Full Game Simulation**: Complete 9-inning games (or more if tied)
-- **Realistic Baseball Mechanics**:
+### GAME FEATURES
+
+**PLAYER ROSTER**
+- 90 all-star players from baseball history (1884-1953)
+- Authentic batting averages from each player's best season
+- Left-handed, right-handed, and switch hitters
+
+**COMPLETE GAME SIMULATION**
+- Full nine-inning games (extra innings if tied)
+- All standard baseball plays including:
   - Singles, doubles, triples, home runs
   - Ground outs, fly outs, line outs, strikeouts
   - Walks, errors, fielder's choices
-  - Double plays, triple plays
+  - Double plays and triple plays
   - Base stealing
   - Sacrifice flies
-  - Runner advancement
+  - Realistic runner advancement
 
-- **Random Number Generation**: Two separate RNG streams initialized by date/time input
-- **Batting Averages**: Each player's historical batting average affects hit probability
-- **Handedness**: Left, right, and switch hitters represented
+**ADVANCED PROBABILITY SYSTEM**
+- Dual random number generators ensure unpredictable gameplay
+- Hit probability based on actual batting averages
+- Seeds initialized by date and time for unique games
 
-## Player Roster
+### PLAYER ROSTER
 
-The game includes 90 all-star players organized by position:
+Choose from 90 legendary players organized by position:
 
-### First Base
+**FIRST BASE**
 Trosky, Foxx, Benson, Mize, Gehrig, Anson, Terry, York, Sisler, Brouthers
 
-### Second Base
+**SECOND BASE**
 Lajoie, E Collins, C Burg, Mack, Gordon, Lazzeri, Frisch, Hornsby, Gehringer, Robinson
 
-### Third Base
+**THIRD BASE**
 Keltner, J Collins, J Burg, Baker, Hack, Groh, Traynor, Kell, McGraw, Kamm
 
-### Shortstop
+**SHORTSTOP**
 Boudreau, Sewell, Crosetti, Cronin, Tumblin, Jennings, Wagner, Appling, Vaughan, Travis
 
-### Left Field
+**LEFT FIELD**
 P Waner, Radcliff, Medwick, Ruth, Simmons, Heilmann, Duffy, Musial, Wheat, Williams
 
-### Center Field
+**CENTER FIELD**
 DiMaggio, Reiser, Keller, Averill, Speaker, Jackson, Cobb, Rice, Henrich, O Rourke
 
-### Right Field
+**RIGHT FIELD**
 L Waner, Burkett, Herman, Crawford, Hamilton, Greenberg, O Doul, Delahanty, Cuyler, Ott
 
-### Catcher
+**CATCHER**
 Hayes, Cochrane, Danning, Dickey, Hartnett, Berra, M Burg, Lombardi, Hegan, Kelly
 
-### Pitcher
+**PITCHER**
 Radbourne, Grove, Feller, Spahn, D Dean, Young, Newhouser, Johnson, Hubbell, Ruffing
 
-## System Requirements
+---
 
-- **Operating System**: Windows 10 or later
-- **Compiler**: Microsoft Visual C++ (MSVC) - part of Visual Studio 2019 or later
-- **Console**: Windows Command Prompt or PowerShell
+## INSTALLATION AND SETUP
 
-## Building the Game
+### SYSTEM REQUIREMENTS
 
-### Prerequisites
+- Windows 10 or later
+- Microsoft Visual C++ compiler (Visual Studio 2019 or newer)
+- Windows Command Prompt or PowerShell
 
-You need to have Microsoft Visual C++ compiler installed. You can get it through:
-- **Visual Studio 2022** (Community Edition is free)
-- **Visual Studio 2019**
-- **Build Tools for Visual Studio** (command-line only, smaller download)
+### BUILDING THE GAME FROM SOURCE
 
-### Compilation Steps
+**REQUIRED SOFTWARE**
+You must have the Microsoft Visual C++ compiler installed. Obtain it from:
+- Visual Studio 2022 (Community Edition - free)
+- Visual Studio 2019
+- Build Tools for Visual Studio (command-line only)
 
-#### Option 1: Using the Build Script (Easiest)
+**COMPILATION PROCEDURE**
 
-1. Open "Developer Command Prompt for VS 2022" (or your VS version)
-2. Navigate to the source directory:
+Method 1: Quick Build
+1. Open "Developer Command Prompt for VS 2022"
+2. Navigate to the game directory
+3. Type: `build.bat` and press ENTER
+
+Method 2: Manual Build
+1. Open "Developer Command Prompt for VS 2022"
+2. Type the following command:
    ```
-   cd path\to\baseball
+   cl /W4 /O2 /Fe:baseball.exe baseball.c players.c /link /SUBSYSTEM:CONSOLE
    ```
-3. Run the build script:
-   ```
-   build.bat
-   ```
+3. Press ENTER
 
-#### Option 2: Manual Compilation
+Method 3: Visual Studio IDE
+1. Launch Visual Studio
+2. Create new Console App project
+3. Add all .c and .h files to project
+4. Press F7 to build
 
-Open "Developer Command Prompt for VS 2022" and run:
+### STARTING THE GAME
 
-```batch
-cl /W4 /O2 /Fe:baseball.exe baseball.c players.c /link /SUBSYSTEM:CONSOLE
-```
+Run `baseball.exe` from the command line or double-click the executable in Windows Explorer.
 
-**Compiler flags explained**:
-- `/W4` - Warning level 4 (high)
-- `/O2` - Optimize for speed
-- `/Fe:baseball.exe` - Output executable name
-- `/link /SUBSYSTEM:CONSOLE` - Console application
+---
 
-### Alternative: Using Visual Studio IDE
+## PLAYING THE GAME
 
-1. Create a new "Console App" project
-2. Add all `.c` and `.h` files to the project
-3. Build -> Build Solution (F7)
+### STEP 1: INITIALIZATION
 
-## Running the Game
+Upon starting, the game will request two pieces of information:
 
-Simply run the executable:
+**TODAYS DATE IS >**
+Enter today's date in any format (examples: "111", "11/09/2024")
 
-```
-baseball.exe
-```
+**THE TIME IS >**
+Enter the current time in any format (examples: "343", "3:43")
 
-Or double-click `baseball.exe` in Windows Explorer.
+NOTE: These values seed the random number generators. Enter different values each time to ensure unique gameplay.
 
-## How to Play
+### STEP 2: SELECT YOUR TEAM (VISITORS)
 
-### 1. Game Initialization
+You will now build your lineup by entering nine player names in batting order.
 
-When you start the game, you'll be prompted for:
-- **Today's Date**: Enter any format (e.g., "111" or "11/09/2024")
-- **Current Time**: Enter any format (e.g., "343" or "3:43")
+**ENTERING PLAYER NAMES**
+- Type the player's last name and press ENTER
+- Names are not case-sensitive (RUTH, ruth, and Ruth all work)
+- Partial names work if they uniquely match (e.g., "MUSI" for Musial)
+- Invalid entries display "NON-VALID PLAYER. RETRY."
 
-These inputs seed the random number generators to ensure different games each time.
-
-### 2. Team Selection
-
-**Visiting Team (You)**: Select 9 players in batting order
-- Type each player's name and press Enter
-- Names are case-insensitive
-- Partial names that match exactly are accepted
-- If you enter an invalid name, you'll see "NON-VALID PLAYER. RETRY."
-
-**Example**:
+**SAMPLE LINEUP**
 ```
 >RUTH
 >CROSETTI
@@ -149,11 +152,11 @@ These inputs seed the random number generators to ensure different games each ti
 >SPEAKER
 ```
 
-**Home Team (Computer)**: The computer randomly selects 9 players from the remaining 81 players.
+After you complete your roster, the computer will randomly select nine players from the remaining 81 for the home team.
 
-### 3. Game Play
+### STEP 3: WATCH THE GAME
 
-The game automatically simulates each at-bat with play-by-play commentary:
+The game simulates automatically with play-by-play text:
 
 ```
 RUTH UP  DOUBLE OVER THIRD
@@ -161,9 +164,11 @@ CROSETTI UP  LONG FLY TO L CENTR RUNNER ON 3RD
 HENRICH UP  SINGLE OVER FIRST RUNNER SCORES
 ```
 
-### 4. Game End
+No input is required during gameplay. Sit back and watch the action unfold.
 
-After 9 innings (or more if tied), the final score is displayed:
+### STEP 4: FINAL SCORE
+
+After nine innings (or extra innings if tied), the final statistics appear:
 
 ```
 GAME COMPLETED. TOTALS
@@ -172,91 +177,103 @@ VISITORS        16  23  01
 HOMETEAM        14  21  01
 ```
 
-Format: Runs, Hits, Errors
+Format: RUNS / HITS / ERRORS
 
-## Game Mechanics
+---
 
-### Hit Probability
+## GAME MECHANICS AND STRATEGY
 
-Base probability = (Batting Average + 50) / 1000
+### UNDERSTANDING HIT PROBABILITY
 
-For example:
-- Babe Ruth (.393) has ~44.3% chance to get a hit per at-bat
-- Ty Cobb (.420) has ~47.0% chance to get a hit per at-bat
+Each player's chance of getting a hit is calculated from their batting average:
 
-### Play Distribution (approximate)
+**Formula:** (Batting Average + 50) / 1000
 
-**Hits**:
-- Home Run: ~5%
-- Triple: ~7%
-- Double: ~18%
-- Single: ~70%
+**Examples:**
+- Babe Ruth (.393) = 44.3% chance per at-bat
+- Ty Cobb (.420) = 47.0% chance per at-bat
 
-**Outs**:
-- Double Play: ~3% (when applicable)
-- Sacrifice Fly: ~5% (when applicable)
-- Strikeout: ~15%
-- Walk: ~5%
-- Error: ~5%
-- Other outs: ~67%
+### OUTCOME PROBABILITIES
 
-### Special Plays
+When a hit occurs, expect the following distribution:
+- Single: 70%
+- Double: 18%
+- Triple: 7%
+- Home Run: 5%
 
-- **Base Stealing**: ~7% chance when runner on first with < 2 outs
-- **Double Plays**: Can only occur with runner on base and < 2 outs
-- **Sacrifice Flies**: Only with runner on 2nd/3rd and < 2 outs
-- **Walks**: Runner advances if forced
+When an out occurs, expect:
+- Standard outs (ground, fly, line): 67%
+- Strikeout: 15%
+- Walk: 5%
+- Error: 5%
+- Double Play: 3% (runner on base, less than 2 outs)
+- Sacrifice Fly: 5% (runner on 2nd/3rd, less than 2 outs)
 
-## Tips for Playing
+**SPECIAL SITUATIONS**
+- Base stealing occurs 7% of the time with runner on first and fewer than two outs
+- Walks force runners to advance when bases are occupied
+- Double plays require a runner on base and fewer than two outs
+- Sacrifice flies only occur with runners on second or third and fewer than two outs
 
-1. **High Average Hitters**: Select players with batting averages over .350 for better offense
-2. **Legendary Players**: 
-   - Best hitters: Cobb (.420), Lajoie (.426), Duffy (.440)
-   - Power hitters: Ruth, Foxx, Gehrig
-   - Consistent hitters: Wagner, Williams, Speaker
+### WINNING STRATEGIES
 
-3. **Team Balance**: Mix left and right-handed batters
-4. **Different Seeds**: Enter different dates/times for varied gameplay
+**BUILD A POWERFUL LINEUP**
+Select players with batting averages above .350 for maximum offensive output.
 
-## Technical Notes
+**KNOW YOUR LEGENDS**
+- Highest averages: Hugh Duffy (.440), Nap Lajoie (.426), Ty Cobb (.420)
+- Power hitters: Babe Ruth, Jimmie Foxx, Lou Gehrig
+- All-around excellence: Honus Wagner, Ted Williams, Tris Speaker
 
-### Random Number Generation
+**MIX YOUR BATTERS**
+Alternate left-handed and right-handed hitters for balanced offense.
 
-The game uses two Linear Congruential Generators (LCGs) that are XORed together:
-- **Generator 1**: Multiplier = 1103515245, Increment = 12345
-- **Generator 2**: Multiplier = 69069, Increment = 1
+**VARY YOUR SEEDS**
+Enter different dates and times to experience diverse gameplay scenarios.
 
-Seeds are initialized from:
+---
+
+## TECHNICAL INFORMATION
+
+### RANDOM NUMBER GENERATION SYSTEM
+
+The game employs a sophisticated dual Linear Congruential Generator (LCG) system with XOR combination:
+- Generator A: Multiplier = 1103515245, Increment = 12345
+- Generator B: Multiplier = 69069, Increment = 1
+
+Seeds derive from:
 1. System time
-2. Characters from date string
-3. Characters from time string
-4. Selected player statistics
+2. Date string characters
+3. Time string characters
+4. Player statistical data
 
-### Code Structure
+### PROGRAM FILES
 
-- `baseball.h` - Header with structures and function declarations
-- `baseball.c` - Main game logic and simulation engine
-- `players.c` - Player database (90 players with statistics)
-- `build.bat` - MSVC build script
+- `baseball.h` - Core definitions and function declarations
+- `baseball.c` - Main simulation engine
+- `players.c` - Player database (90 entries with statistics)
+- `build.bat` - Compilation script
 
-### Differences from Original
+### FAITHFUL RECREATION
 
-This modern implementation maintains the spirit of the original while adapting to modern systems:
+This version preserves the original 1961 game while adapting to modern hardware:
 
-**Retained**:
-- All 90 original players with their statistics
-- Game mechanics and play types
-- Random number generation approach
-- Play-by-play output style
+**PRESERVED ELEMENTS**
+- All 90 original players with authentic statistics
+- Complete game mechanics and play types
+- Random number generation methodology
+- Classic play-by-play output format
 
-**Updated**:
-- C language instead of IBM 1620 machine code
-- Windows console instead of typewriter output
-- Modern string handling (strcpy_s instead of strcpy)
-- Structured code with functions instead of goto-heavy machine code
-- ANSI C standards compliance
+**MODERNIZED ELEMENTS**
+- Compiled C code (originally IBM 1620 machine code)
+- Windows console output (originally typewriter)
+- Secure string functions (strcpy_s vs. strcpy)
+- Structured programming (replaces goto-based logic)
+- ANSI C compliance
 
-## Example Game Output
+---
+
+## SAMPLE GAME SESSION
 
 ```
 ========================================
@@ -278,7 +295,20 @@ NAME       TEAM AVG BATS
         LF 1923 YANKS              .393  L
 >CROSETTI
         SS 1936 YANKS              .288  R
-...
+>HENRICH
+        RF 1948 YANKS              .308  L
+>HEGAN
+        C  1948 CLEV               .248  R
+>TROSKY
+        1B 1936 CLEV               .343  L
+>GORDON
+        2B 1942 YANKS              .322  R
+>WAGNER
+        SS 1908 PIRATES            .354  R
+>WILLIAMS
+        LF 1941 B SOX              .406  L
+>SPEAKER
+        CF 1916 CLEV               .386  L
 
 HOME TEAM
 
@@ -286,70 +316,51 @@ NAME       TEAM AVG BATS
 
 YORK       1B 1940 DETROIT         .316  R
 E COLLINS  2B 1920 W SOX           .369  L
+TRAYNOR    3B 1930 PIRATES         .366  R
 ...
 
 RUTH UP  DOUBLE OVER THIRD
 CROSETTI UP  LONG FLY TO L CENTR RUNNER ON 3RD
 HENRICH UP  SINGLE OVER FIRST RUNNER SCORES
-...
+HEGAN UP  STRIKEOUT
+TROSKY UP  HOME RUN
 
 3 RUNS  3 HITS  0 ERRORS
 
 END OF INNING 1    SCORE 3 0
+
+[Game continues...]
 ```
-
-## Known Limitations
-
-1. The home team continues playing the bottom of the 9th even when already ahead (this matches original behavior)
-2. Pitcher effectiveness is not modeled (all pitchers equal)
-3. No defensive ratings (errors are random)
-4. No player substitutions during game
-5. No save/load game functionality
-
-## Historical Context
-
-This program demonstrates early computer gaming (1961) and the use of computers for sports simulation. The IBM 1620 was a decimal-based computer with 20,000 digits of memory, and this program used all available memory.
-
-The original program was coded directly in machine language over several months in early 1961 and was extensively tested over 300+ games.
-
-## Credits
-
-**Original Program**: Paul R. Burgeson (1961)  
-**Modern C Port**: 2024  
-**Based on**: IBM 1620 General Program Library 11.0.032
-
-## License
-
-This is a recreation of historical software for educational and entertainment purposes.
-
-## Troubleshooting
-
-### "cl is not recognized..."
-- You need to open "Developer Command Prompt for VS" not regular Command Prompt
-- Or run `vcvarsall.bat` to set up the environment
-
-### Compilation Errors
-- Ensure all three files (.h and two .c files) are in the same directory
-- Check that you're using MSVC, not another compiler
-- Try with `/std:c11` flag if needed
-
-### Game Crashes
-- This shouldn't happen, but if it does, report the player names you entered
-- Try running in a regular Command Prompt window
-
-## Contributing
-
-Feel free to enhance this recreation:
-- Add defensive ratings
-- Implement pitcher effectiveness
-- Add statistics tracking
-- Create a GUI version
-- Port to other platforms
-
-## Contact
-
-For issues with this modern implementation, please create an issue in the repository.
 
 ---
 
-**Enjoy playing baseball like it's 1961!** 🎮⚾
+## GAMEPLAY NOTES
+
+**AUTHENTIC 1961 BEHAVIOR**
+The following characteristics match the original program:
+1. Home team completes the bottom of the 9th inning regardless of score
+2. All pitchers perform equally (no individual effectiveness ratings)
+3. Defensive errors occur randomly (no fielding ratings)
+4. No substitutions permitted during game
+5. Games cannot be saved or loaded
+
+---
+
+## CREDITS
+
+**ORIGINAL PROGRAM**
+Paul R. Burgeson, 1961
+Youngstown, Ohio
+
+**SOURCE**
+IBM 1620 General Program Library 11.0.032
+
+This recreation is provided for educational and entertainment purposes.
+
+---
+
+## WARRANTY AND SUPPORT
+
+This software is provided "as is" without warranty of any kind. For technical issues with this recreation, please submit a detailed report through the repository issue tracker.
+
+---

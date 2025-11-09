@@ -1,14 +1,16 @@
 #!/usr/bin/env python3
 """
-Convert team batting CSV files to C code format for players.c
+Generate World Series 2024 players.c with LAD and NYY rosters only
+Uses 2025 batting data (data limitation)
+Top 3 players per team per position
 """
 
 import csv
 import re
 import os
 
-# Team codes to process
-TEAMS_TO_PROCESS = ['NYY', 'NYM', 'LAD', 'BOS', 'BAL', 'CHC']
+# World Series 2024 teams
+TEAMS_TO_PROCESS = ['LAD', 'NYY']
 
 # Position mapping from CSV to C enum values
 POSITION_MAP = {
@@ -74,7 +76,7 @@ def parse_position(team_position_str):
 
 def get_team_abbreviation(team_code):
     """Convert team code to 3-letter abbreviation"""
-    # Keep the team codes as-is (NYY, NYM, LAD, etc.)
+    # Keep the team codes as-is (NYY, LAD)
     return team_code
 
 
@@ -138,12 +140,13 @@ def read_csv_and_extract_players(csv_path, team_code):
     return players
 
 
-def generate_c_code(all_players, max_per_position=18):
+def generate_c_code(all_players, max_per_position=6):
     """Generate C code for initialize_roster function"""
     lines = []
     lines.append("/*")
-    lines.append(" * Player Roster Data")
-    lines.append(f" * {max_per_position * 9} all-star players with balanced team distribution")
+    lines.append(" * World Series 2024 Player Roster Data")
+    lines.append(" * LAD vs NYY (using 2025 batting data)")
+    lines.append(f" * Top 3 players per team per position ({max_per_position} total per position)")
     lines.append(" */")
     lines.append("")
     lines.append('#include "baseball.h"')
@@ -214,12 +217,13 @@ def generate_c_code(all_players, max_per_position=18):
     return '\n'.join(lines)
 
 
-def generate_markdown_table(all_players, max_per_position=18):
+def generate_markdown_table(all_players, max_per_position=6):
     """Generate markdown table with player information"""
     lines = []
-    lines.append("# BBC Baseball Player Roster")
+    lines.append("# World Series 2024 Player Roster")
     lines.append("")
-    lines.append("Generated from team CSV data (Top 3 players per team per position)")
+    lines.append("LAD vs NYY (using 2025 batting data)")
+    lines.append("Top 3 players per team per position")
     lines.append("")
     lines.append("| Name | Jersey # | Team | Batting Avg | Hand | Position |")
     lines.append("|------|----------|------|-------------|------|----------|")
@@ -279,7 +283,7 @@ def generate_markdown_table(all_players, max_per_position=18):
 
 
 def main():
-    """Main function to process all teams and generate players.c"""
+    """Main function to process World Series teams and generate World_Series_2024_players.c"""
     all_players = []
     
     # Process each team
@@ -298,21 +302,21 @@ def main():
     
     print(f"\nTotal players: {len(all_players)}")
     
-    # Generate C code with 18 players per position (top 3 from each of 6 teams)
-    c_code = generate_c_code(all_players, max_per_position=18)
+    # Generate C code with 6 players per position (top 3 from each of 2 teams)
+    c_code = generate_c_code(all_players, max_per_position=6)
     
-    # Write to players.c
-    output_path = 'players.c'
+    # Write to World_Series_2024_players.c
+    output_path = 'World_Series_2024_players.c'
     with open(output_path, 'w', encoding='utf-8') as f:
         f.write(c_code)
     
     print(f"\nGenerated {output_path} successfully!")
     
-    # Generate markdown table with 18 players per position
-    markdown_content = generate_markdown_table(all_players, max_per_position=18)
+    # Generate markdown table with 6 players per position
+    markdown_content = generate_markdown_table(all_players, max_per_position=6)
     
     # Write to markdown file
-    markdown_path = 'player_roster.md'
+    markdown_path = 'world_series_2024_roster.md'
     with open(markdown_path, 'w', encoding='utf-8') as f:
         f.write(markdown_content)
     
