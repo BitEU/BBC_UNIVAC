@@ -3,25 +3,25 @@
 
 ### CONGRATULATIONS!
 
-You are now the proud owner of the BBC (Burgeson Baseball Computer) Baseball Simulation, one of the earliest computer baseball games ever created. Originally programmed in 1961 for the IBM 1620 computer by Paul R. Burgeson of Youngstown, Ohio, this game has been faithfully recreated for your Windows computer.
+You are now the proud owner of the BBC (Burgeson Baseball Computer) Baseball Simulation. Originally created in 1961 by Paul R. Burgeson for the IBM 1620 computer, this version features a modern roster of 2025 MLB players while maintaining the classic simulation engine.
 
 ### GAME OVERVIEW
 
-BBC Baseball puts you in command of an all-star lineup featuring 90 of baseball's greatest legends from 1884 to 1953. Select your dream team and compete against the computer in a full nine-inning game. Will your strategic choices lead to victory, or will the computer's random selections prove superior?
+BBC Baseball puts you in command of an all-star lineup featuring 100 players from the 2025 MLB season. Select your dream team and compete against the computer in a full nine-inning game. Will your strategic choices lead to victory, or will the computer's random selections prove superior?
 
 **ORIGINAL SPECIFICATIONS**
-- Author: Paul R. Burgeson
-- Release Date: January 1961
+- Original Author: Paul R. Burgeson
+- Original Release: January 1961
 - Original System: IBM 1620 (20,000 digits of memory)
-- Programming Language: Machine code
-- This Version: Microsoft Visual C++ for Windows
+- This Version: Microsoft Visual C++ for Windows with 2025 player data
 
 ### GAME FEATURES
 
 **PLAYER ROSTER**
-- 90 all-star players from baseball history (1884-1953)
-- Authentic batting averages from each player's best season
-- Left-handed, right-handed, and switch hitters
+- Current MLB players from the 2025 season
+- Batting averages from 2025 season statistics
+- Left-handed and right-handed batters
+- Jersey number support for player selection
 
 **COMPLETE GAME SIMULATION**
 - Full nine-inning games (extra innings if tied)
@@ -36,39 +36,26 @@ BBC Baseball puts you in command of an all-star lineup featuring 90 of baseball'
 
 **ADVANCED PROBABILITY SYSTEM**
 - Dual random number generators ensure unpredictable gameplay
-- Hit probability based on actual batting averages
+- Hit probability based on actual 2025 batting averages
 - Seeds initialized by date and time for unique games
 
 ### PLAYER ROSTER
 
-Choose from 90 legendary players organized by position:
+Choose from current MLB players organized by position from the 2025 season. Players include stars from all 30 MLB teams including:
 
-**FIRST BASE**
-Trosky, Foxx, Benson, Mize, Gehrig, Anson, Terry, York, Sisler, Brouthers
+**TOP BATTERS**
+- Aaron Judge (NYY, .331)
+- Romy González (BOS, .305)
+- Amed Rosario (NYY, .303)
+- Moisés Ballesteros (CHC, .298)
+- Nico Hoerner (CHC, .297)
+- Nate Eaton (BOS, .296)
+- Freddie Freeman (LAD, .295)
 
-**SECOND BASE**
-Lajoie, E Collins, C Burg, Mack, Gordon, Lazzeri, Frisch, Hornsby, Gehringer, Robinson
+**FEATURED TEAMS**
+Players from BAL, BOS, CHC, LAD, NYY, NYM and all other MLB teams
 
-**THIRD BASE**
-Keltner, J Collins, J Burg, Baker, Hack, Groh, Traynor, Kell, McGraw, Kamm
-
-**SHORTSTOP**
-Boudreau, Sewell, Crosetti, Cronin, Tumblin, Jennings, Wagner, Appling, Vaughan, Travis
-
-**LEFT FIELD**
-P Waner, Radcliff, Medwick, Ruth, Simmons, Heilmann, Duffy, Musial, Wheat, Williams
-
-**CENTER FIELD**
-DiMaggio, Reiser, Keller, Averill, Speaker, Jackson, Cobb, Rice, Henrich, O Rourke
-
-**RIGHT FIELD**
-L Waner, Burkett, Herman, Crawford, Hamilton, Greenberg, O Doul, Delahanty, Cuyler, Ott
-
-**CATCHER**
-Hayes, Cochrane, Danning, Dickey, Hartnett, Berra, M Burg, Lombardi, Hegan, Kelly
-
-**PITCHER**
-Radbourne, Grove, Feller, Spahn, D Dean, Young, Newhouser, Johnson, Hubbell, Ruffing
+For a complete list of all 100 players with statistics, consult the `player_roster.md` file or view them during team selection.
 
 ---
 
@@ -134,37 +121,45 @@ NOTE: These values seed the random number generators. Enter different values eac
 You will now build your lineup by entering nine player names in batting order.
 
 **ENTERING PLAYER NAMES**
-- Type the player's last name and press ENTER
-- Names are not case-sensitive (RUTH, ruth, and Ruth all work)
-- Partial names work if they uniquely match (e.g., "MUSI" for Musial)
+- Type the player's full or last name and press ENTER
+- Names are not case-sensitive (JUDGE, judge, and Judge all work)
+- You can also use jersey number format: "99NYY" or "99-NYY" for Aaron Judge
 - Invalid entries display "NON-VALID PLAYER. RETRY."
+- Already selected players display "PLAYER ALREADY SELECTED. RETRY."
 
 **SAMPLE LINEUP**
 ```
->RUTH
->CROSETTI
->HENRICH
->HEGAN
->TROSKY
->GORDON
->WAGNER
->WILLIAMS
->SPEAKER
+>AARON JUDGE
+>FREDDIE FREEMAN
+>MOISÉS BALLESTEROS
+>SHOHEI OHTANI
+>GUNNAR HENDERSON
+>FRANCISCO LINDOR
+>MOOKIE BETTS
+>JARREN DURAN
+>WILL SMITH
 ```
 
-After you complete your roster, the computer will randomly select nine players from the remaining 81 for the home team.
+**ALTERNATE METHOD (Jersey Numbers)**
+```
+>99NYY
+>22NYM
+>17LAD
+```
+
+After you complete your roster, the computer will randomly select nine players from the remaining 97 for the home team.
 
 ### STEP 3: WATCH THE GAME
 
 The game simulates automatically with play-by-play text:
 
 ```
-RUTH UP  DOUBLE OVER THIRD
-CROSETTI UP  LONG FLY TO L CENTR RUNNER ON 3RD
-HENRICH UP  SINGLE OVER FIRST RUNNER SCORES
+AARON JUDGE UP  HOMER TO RIGHT
+JUAN SOTO UP  SINGLE TO CENTER
+SHOHEI OHTANI UP  DOUBLE TO L CENTR
 ```
 
-No input is required during gameplay. Sit back and watch the action unfold.
+No input is required during gameplay. Sit back and watch the action unfold. The game may occasionally display base situations between plays.
 
 ### STEP 4: FINAL SCORE
 
@@ -185,48 +180,57 @@ Format: RUNS / HITS / ERRORS
 
 ### UNDERSTANDING HIT PROBABILITY
 
-Each player's chance of getting a hit is calculated from their batting average:
+Each player's chance of getting a hit is based on their 2025 batting average plus a 50-point bonus. The game rolls a random number from 1-1000 and compares it to the player's adjusted batting average.
 
-**Formula:** (Batting Average + 50) / 1000
+**Formula:** Random roll ≤ (batting average + 50) = HIT
 
 **Examples:**
-- Babe Ruth (.393) = 44.3% chance per at-bat
-- Ty Cobb (.420) = 47.0% chance per at-bat
+- Aaron Judge (.331) = 381/1000 chance = 38.1% per at-bat
+- Freddie Freeman (.295) = 345/1000 chance = 34.5% per at-bat
+- Moisés Ballesteros (.298) = 348/1000 chance = 34.8% per at-bat
 
 ### OUTCOME PROBABILITIES
 
 When a hit occurs, expect the following distribution:
-- Single: 70%
-- Double: 18%
-- Triple: 7%
-- Home Run: 5%
+- Single: 70% (hit_type 13-100)
+- Double: 18% (hit_type 13-30)
+- Triple: 7% (hit_type 6-12)
+- Home Run: 5% (hit_type 1-5)
 
 When an out occurs, expect:
-- Standard outs (ground, fly, line): 67%
-- Strikeout: 15%
-- Walk: 5%
-- Error: 5%
-- Double Play: 3% (runner on base, less than 2 outs)
-- Sacrifice Fly: 5% (runner on 2nd/3rd, less than 2 outs)
+- Ground Out: 32% (out_type 34-65)
+- Fly Out: 20% (out_type 66-85)
+- Line Out: 15% (out_type 86-100)
+- Strikeout (swinging): 7% (out_type 9-15)
+- Strikeout (called): 5% (out_type 16-20)
+- Walk: 5% (out_type 21-25)
+- Error: 5% (out_type 26-30)
+- Sacrifice Fly: 5% (out_type 4-8, runner on 2nd/3rd, less than 2 outs)
+- Double Play: 3% (out_type 1-3, runner on base, less than 2 outs)
+- Fielder's Choice: 2% (out_type 31-32, runner on first)
+- Triple Play: 1% (out_type 33, runners on 1st and 2nd, 0 outs)
 
 **SPECIAL SITUATIONS**
-- Base stealing occurs 7% of the time with runner on first and fewer than two outs
+- Base stealing occurs ~8.3% of the time with runner on first, no runner on second, and fewer than two outs (1 in 12 chance)
+- Caught stealing occurs ~4% of the time with runner on first and fewer than two outs (1 in 25 chance)
+- Double steal attempt occurs ~5% of the time with runners on first and second (1 in 20 chance)
 - Walks force runners to advance when bases are occupied
-- Double plays require a runner on base and fewer than two outs
+- Double plays require a runner on first and fewer than two outs
+- Triple plays require runners on first and second with no outs (0 outs exactly)
 - Sacrifice flies only occur with runners on second or third and fewer than two outs
 
 ### WINNING STRATEGIES
 
 **BUILD A POWERFUL LINEUP**
-Select players with batting averages above .350 for maximum offensive output.
+Select players with batting averages above .280 for maximum offensive output.
 
-**KNOW YOUR LEGENDS**
-- Highest averages: Hugh Duffy (.440), Nap Lajoie (.426), Ty Cobb (.420)
-- Power hitters: Babe Ruth, Jimmie Foxx, Lou Gehrig
-- All-around excellence: Honus Wagner, Ted Williams, Tris Speaker
+**KNOW YOUR STARS**
+- Top averages: Aaron Judge (.331), Romy González (.305), Amed Rosario (.303)
+- High performers: Moisés Ballesteros (.298), Nico Hoerner (.297), Freddie Freeman (.295)
+- Power threats: Shohei Ohtani, Kyle Tucker, Teoscar Hernández
 
 **MIX YOUR BATTERS**
-Alternate left-handed and right-handed hitters for balanced offense.
+The game features both left-handed and right-handed batters. Consider lineup balance.
 
 **VARY YOUR SEEDS**
 Enter different dates and times to experience diverse gameplay scenarios.
@@ -251,22 +255,24 @@ Seeds derive from:
 
 - `baseball.h` - Core definitions and function declarations
 - `baseball.c` - Main simulation engine
-- `players.c` - Player database (90 entries with statistics)
+- `players.c` - Player database (100 entries with statistics)
 - `build.bat` - Compilation script
 
-### FAITHFUL RECREATION
+### RECREATION NOTES
 
-This version preserves the original 1961 game while adapting to modern hardware:
+This version preserves the original 1961 game engine while updating the player roster:
 
-**PRESERVED ELEMENTS**
-- All 90 original players with authentic statistics
+**PRESERVED FROM ORIGINAL**
 - Complete game mechanics and play types
-- Random number generation methodology
+- Random number generation methodology (dual LCG with XOR)
 - Classic play-by-play output format
+- Original simulation algorithms
 
 **MODERNIZED ELEMENTS**
+- 2025 MLB player roster (100 current players)
 - Compiled C code (originally IBM 1620 machine code)
 - Windows console output (originally typewriter)
+- Jersey number player selection (e.g., "99NYY")
 - Secure string functions (strcpy_s vs. strcpy)
 - Structured programming (replaces goto-based logic)
 - ANSI C compliance
@@ -281,7 +287,7 @@ This version preserves the original 1961 game while adapting to modern hardware:
   Burgeson Baseball Computer
 ========================================
 
-TODAYS DATE IS >11/09/2024
+TODAYS DATE IS >11/09/2025
 
 THE TIME IS >3:43 PM
 
@@ -291,43 +297,42 @@ VISITORS
 
 NAME       TEAM AVG BATS
 
->RUTH
-        LF 1923 YANKS              .393  L
->CROSETTI
-        SS 1936 YANKS              .288  R
->HENRICH
-        RF 1948 YANKS              .308  L
->HEGAN
-        C  1948 CLEV               .248  R
->TROSKY
-        1B 1936 CLEV               .343  L
->GORDON
-        2B 1942 YANKS              .322  R
->WAGNER
-        SS 1908 PIRATES            .354  R
->WILLIAMS
-        LF 1941 B SOX              .406  L
->SPEAKER
-        CF 1916 CLEV               .386  L
+>AARON JUDGE
+        RI  2025 NYY                .331  R
+>FREDDIE FREEMAN
+        FI  2025 LAD                .295  L
+>SHOHEI OHTANI
+        FI  2025 LAD                .282  L
+>MOISÉS BALLESTEROS
+        FI  2025 CHC                .298  L
+>GUNNAR HENDERSON
+        SH  2025 BAL                .274  L
+>FRANCISCO LINDOR
+        SH  2025 NYM                .267  B
+>MOOKIE BETTS
+        SH  2025 LAD                .258  R
+>JARREN DURAN
+        LE  2025 BOS                .256  L
+>WILL SMITH
+        CA  2025 LAD                .296  R
 
 HOME TEAM
 
 NAME       TEAM AVG BATS
 
-YORK       1B 1940 DETROIT         .316  R
-E COLLINS  2B 1920 W SOX           .369  L
-TRAYNOR    3B 1930 PIRATES         .366  R
+KYLE TUCKER   RI  2025 CHC           .266  L
+TEOSCAR HERNÁNDEZ RI 2025 LAD        .247  R
+PETE ALONSO   FI  2025 NYM           .272  R
 ...
 
-RUTH UP  DOUBLE OVER THIRD
-CROSETTI UP  LONG FLY TO L CENTR RUNNER ON 3RD
-HENRICH UP  SINGLE OVER FIRST RUNNER SCORES
-HEGAN UP  STRIKEOUT
-TROSKY UP  HOME RUN
+AARON JUDGE UP  HOMER TO RIGHT
+FREDDIE FREEMAN UP  SINGLE TO CENTER
+SHOHEI OHTANI UP  GROUNDER TO SHORT
+MOISÉS BALLESTEROS UP  DOUBLE TO L CENTR
 
-3 RUNS  3 HITS  0 ERRORS
+2 RUNS  3 HITS  0 ERRORS
 
-END OF INNING 1    SCORE 3 0
+END OF INNING 1    SCORE 2 0
 
 [Game continues...]
 ```
@@ -336,13 +341,29 @@ END OF INNING 1    SCORE 3 0
 
 ## GAMEPLAY NOTES
 
-**AUTHENTIC 1961 BEHAVIOR**
-The following characteristics match the original program:
-1. Home team completes the bottom of the 9th inning regardless of score
-2. All pitchers perform equally (no individual effectiveness ratings)
+**GAMEPLAY CHARACTERISTICS**
+1. Home team completes the bottom of the 9th inning regardless of score (authentic 1961 behavior)
+2. No pitcher effectiveness (all players bat, no pitching stats used)
 3. Defensive errors occur randomly (no fielding ratings)
 4. No substitutions permitted during game
 5. Games cannot be saved or loaded
+6. Player positions shown during selection are informational only
+
+---
+
+## HISTORICAL BACKGROUND
+
+The original BBC Baseball Simulation was a landmark achievement in early computer gaming. Created in 1961 by Paul R. Burgeson, the program showcased the potential of computers for sports simulation and entertainment.
+
+**THE ORIGINAL IBM 1620 VERSION**
+- Decimal-based architecture
+- 20,000 digits of memory
+- Hand-coded in machine language
+- Featured players from 1884-1953
+- Tested across 300+ simulated games
+
+**THIS VERSION**
+This modern recreation maintains the original simulation engine while featuring 100 current MLB players from the 2025 season. The core algorithms, probability systems, and gameplay mechanics remain faithful to Burgeson's 1961 design.
 
 ---
 
@@ -352,8 +373,11 @@ The following characteristics match the original program:
 Paul R. Burgeson, 1961
 Youngstown, Ohio
 
-**SOURCE**
+**ORIGINAL SOURCE**
 IBM 1620 General Program Library 11.0.032
+
+**2025 PLAYER DATA**
+MLB batting statistics from the 2025 season
 
 This recreation is provided for educational and entertainment purposes.
 

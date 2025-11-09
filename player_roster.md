@@ -113,4 +113,4 @@ Generated from team CSV data (Top 3 players per team per position)
 | J.C. ESCARRA | 25 | NYY | .202 | LEFT | Catcher |
 | CONNOR WONG | 12 | BOS | .190 | RIGHT | Catcher |
 
-**Total Players: 106**
+**Total Players: 100**
