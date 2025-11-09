@@ -13,12 +13,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
 #include <ctype.h>
+
+// Platform-specific includes
+#ifndef UNIVAC
 #include <windows.h>
+#endif
 
 // Constants
-#define MAX_PLAYERS 90
+#define MAX_PLAYERS 100
 #define TEAM_SIZE 9
 #define MAX_NAME_LEN 30
 #define MAX_TEAM_NAME_LEN 20
@@ -133,6 +136,8 @@ void print_base_situation(GameState* game);
 Player* find_player(const char* name);
 void clear_bases(GameState* game);
 void to_uppercase(char* str);
+#ifndef UNIVAC
 void console_setup(void);
+#endif
 
 #endif // BASEBALL_H

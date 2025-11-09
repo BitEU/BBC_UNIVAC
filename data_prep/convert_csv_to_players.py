@@ -12,6 +12,7 @@ from pathlib import Path
 # Determine repository root (one level up from data_prep)
 REPO_ROOT = Path(__file__).resolve().parent.parent
 TEAM_DATA_DIR = REPO_ROOT / 'team_data'
+DOCS_DIR = REPO_ROOT / 'docs'
 
 # Team codes for full roster
 ALL_STAR_TEAMS = ['NYY', 'NYM', 'LAD', 'BOS', 'BAL', 'CHC']
@@ -147,26 +148,19 @@ def read_csv_and_extract_players(csv_path, team_code):
     return players
 
 
-def generate_c_code(all_players, teams_to_process, max_per_position=18, header_comment="162 all-star players with balanced team distribution"):
-    """Generate C code for initialize_roster function"""
+def generate_c_code(all_players, teams_to_process, max_per_position=18, header_comment="All your favorite all-star players with balanced team distribution"):
+    """Generate C code with compile-time initialization"""
     lines = []
     lines.append("/*")
     lines.append(" * Player Roster Data")
     lines.append(f" * {header_comment}")
+    lines.append(" * Compile-time initialization for fast startup on UNIVAC")
     lines.append(" */")
     lines.append("")
     lines.append('#include "baseball.h"')
     lines.append("")
-    lines.append("Player player_roster[MAX_PLAYERS];")
-    lines.append("")
-    lines.append("static int idx=0;")
-    lines.append("static void P(char*n,int y,char*t,int a,char h,int p,int j){")
-    lines.append("strcpy(player_roster[idx].name,n);player_roster[idx].year=y;strcpy(player_roster[idx].team,t);")
-    lines.append("player_roster[idx].batting_avg=a;player_roster[idx].hand=h;player_roster[idx].position=p;")
-    lines.append("player_roster[idx++].j_num=j;}")
-    lines.append("")
-    lines.append("void initialize_roster(void) {")
-    lines.append("idx=0;")
+    lines.append("// Player roster with compile-time initialization")
+    lines.append("Player player_roster[MAX_PLAYERS] = {")
     
     # Group players by position AND team
     position_groups = {}
@@ -217,14 +211,20 @@ def generate_c_code(all_players, teams_to_process, max_per_position=18, header_c
         players = selected_players[:max_per_position]
         
         if players:  # Only add comment if there are players
-            lines.append(f"// {pos_name}")
-        
+            lines.append(f"    // {pos_name}")
+
         for player in players:
             hand_char = hand_map.get(player['hand'], 'R')
-            lines.append(f'P("{player["name"]}",{player["year"]},"{player["team"]}",{player["batting_avg"]},\'{hand_char}\',{player["position"]},{player["j_num"]});')
-    
+            lines.append(f'    {{"{player["name"]}", {player["year"]}, "{player["team"]}", {player["batting_avg"]}, \'{hand_char}\', {player["position"]}, {player["j_num"]}}},')
+
+    # Close the array and add the initialize_roster function
+    lines.append("};")
+    lines.append("")
+    lines.append("// Empty function for compatibility - roster is now initialized at compile time")
+    lines.append("void initialize_roster(void) {")
+    lines.append("    // No-op: player_roster is already initialized above")
     lines.append("}")
-    
+
     return '\n'.join(lines)
 
 
@@ -332,12 +332,15 @@ def process_roster(teams_to_process, output_c_file, output_md_file, max_per_posi
     
     # Generate markdown table
     markdown_content = generate_markdown_table(all_players, teams_to_process, max_per_position, md_title, md_subtitle)
-    
-    # Write to markdown file at repository root
-    output_md_path = REPO_ROOT / output_md_file
+
+    # Ensure docs directory exists
+    DOCS_DIR.mkdir(exist_ok=True)
+
+    # Write to markdown file in docs folder
+    output_md_path = DOCS_DIR / output_md_file
     with open(output_md_path, 'w', encoding='utf-8') as f:
         f.write(markdown_content)
-    
+
     print(f"Generated {output_md_path} successfully!")
     print()
 
@@ -357,7 +360,7 @@ def main():
         output_c_file='players.c',
         output_md_file='player_roster.md',
         max_per_position=18,
-        header_comment="162 all-star players with balanced team distribution",
+        header_comment="All your favorite all-star players with balanced team distribution",
         md_title="BBC Baseball Player Roster",
         md_subtitle="Generated from team CSV data (Top 3 players per team per position)"
     )

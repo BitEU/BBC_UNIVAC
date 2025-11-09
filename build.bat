@@ -10,9 +10,31 @@ echo ========================================
 echo.
 
 REM ============================================================================
-REM STEP 1: SELECT COMPILER
+REM STEP 1: SELECT PLATFORM
 REM ============================================================================
+set PLATFORM=
+echo Please select target platform:
+echo   Press ENTER or 1 for Windows
+echo   Press 2 for UNIVAC (cross-compile)
+echo.
+set /p PLATFORM="Enter your choice (default: Windows): "
+
+if "%PLATFORM%"=="" set PLATFORM=1
+if "%PLATFORM%"=="1" goto SELECT_COMPILER
+if "%PLATFORM%"=="2" (
+    set COMPILER=1
+    set UNIVAC_BUILD=1
+    goto SELECT_PLAYERS
+)
+echo Invalid choice. Defaulting to Windows.
+set PLATFORM=1
+
+REM ============================================================================
+REM STEP 2: SELECT COMPILER (Windows only)
+REM ============================================================================
+:SELECT_COMPILER
 set COMPILER=
+echo.
 echo Please select your compiler:
 echo   Press ENTER or 1 for MinGW
 echo   Press 2 for MSVC
@@ -26,7 +48,7 @@ echo Invalid choice. Defaulting to MinGW.
 set COMPILER=1
 
 REM ============================================================================
-REM STEP 2: SELECT PLAYER DATA
+REM STEP 3: SELECT PLAYER DATA
 REM ============================================================================
 :SELECT_PLAYERS
 set PLAYERS=
@@ -58,9 +80,97 @@ echo Selected: %PLAYERS_DESC%
 echo.
 
 REM Jump to the selected compiler build
+if defined UNIVAC_BUILD goto UNIVAC_BUILD
 if "%COMPILER%"=="1" goto MINGW_BUILD
 if "%COMPILER%"=="2" goto MSVC_BUILD
 goto MINGW_BUILD
+
+REM ============================================================================
+REM UNIVAC BUILD (Cross-compile with -DUNIVAC flag)
+REM ============================================================================
+:UNIVAC_BUILD
+echo.
+REM Check if gcc is available
+where gcc >nul 2>&1
+if %ERRORLEVEL% NEQ 0 (
+    echo ERROR: GCC not found in PATH
+    echo Please install MinGW-w64 or your cross-compiler toolchain
+    pause
+    exit /b 1
+)
+
+echo Compiler: GCC with UNIVAC flag
+gcc --version | findstr "gcc"
+echo.
+
+REM Clean previous build artifacts
+echo Cleaning previous build artifacts...
+if exist baseball_univac.exe del /Q baseball_univac.exe
+if exist baseball_univac.o del /Q baseball_univac.o
+if exist players_univac.o del /Q players_univac.o
+if exist *.o del /Q *.o
+echo.
+
+echo Building for UNIVAC platform...
+echo Compiler: GCC
+echo Player Data: %PLAYERS_DESC%
+echo Platform Flags: -DUNIVAC
+echo.
+
+echo Compiling baseball.c...
+gcc -c -DUNIVAC -O2 -Wall baseball.c -o baseball_univac.o
+
+if %ERRORLEVEL% NEQ 0 (
+    echo ERROR: Failed to compile baseball.c
+    pause
+    exit /b 1
+)
+
+echo Compiling %PLAYERS_FILE%...
+gcc -c -DUNIVAC -O2 -Wall %PLAYERS_FILE% -o players_univac.o
+
+if %ERRORLEVEL% NEQ 0 (
+    echo ERROR: Failed to compile %PLAYERS_FILE%
+    pause
+    exit /b 1
+)
+
+echo Linking...
+gcc -o baseball_univac.exe baseball_univac.o players_univac.o
+
+if %ERRORLEVEL% EQU 0 (
+    echo.
+    echo ========================================
+    echo   BUILD SUCCESSFUL - UNIVAC
+    echo ========================================
+    echo.
+    echo Output: baseball_univac.exe
+
+    REM Display file size
+    for %%A in (baseball_univac.exe^) do (
+        echo File size: %%~zA bytes
+    )
+    echo.
+    echo Platform: UNIVAC ^(cross-compiled with -DUNIVAC^)
+    echo.
+    echo NOTE: This executable is built for UNIVAC compatibility:
+    echo   - No Windows dependencies ^(windows.h, time.h^)
+    echo   - No runtime roster initialization
+    echo   - Uses strncpy instead of strcpy_s
+    echo.
+    goto :EOF
+) else (
+    echo.
+    echo ========================================
+    echo   BUILD FAILED
+    echo ========================================
+    echo.
+    echo Check the error messages above.
+    pause
+    exit /b 1
+)
+
+exit /b 0
 
 REM ============================================================================
 REM MINGW BUILD

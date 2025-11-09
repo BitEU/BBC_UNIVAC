@@ -5,6 +5,13 @@
 
 #include "baseball.h"
 
+// Platform-specific string copy
+#ifdef UNIVAC
+#define SAFE_STRCPY(dest, src, size) do { strncpy(dest, src, (size)-1); (dest)[(size)-1] = '\0'; } while(0)
+#else
+#define SAFE_STRCPY(dest, src, size) strcpy_s(dest, size, src)
+#endif
+
 // Global random state
 static unsigned int g_rand_seed1 = 0;
 static unsigned int g_rand_seed2 = 0;
@@ -21,9 +28,10 @@ static const char* field_locations[] = {
 
 // Initialize random number generators
 void init_random(const char* date_str, const char* time_str) {
-    g_rand_seed1 = (unsigned int)time(NULL);
-    g_rand_seed2 = g_rand_seed1 ^ 0x12345678;
-    
+    // Use only user input for entropy
+    g_rand_seed1 = 0x12345678;
+    g_rand_seed2 = 0x87654321;
+
     // Mix in characters from date and time strings
     for (int i = 0; date_str[i]; i++) {
         g_rand_seed1 = (g_rand_seed1 * 31) + date_str[i];
@@ -49,20 +57,22 @@ int weighted_random(int batting_avg) {
     return roll <= batting_avg;
 }
 
+#ifndef UNIVAC
 // Console setup for Windows
 void console_setup(void) {
     // Set console code page to UTF-8 for proper character display
     SetConsoleOutputCP(CP_UTF8);
-    
+
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     DWORD mode;
     GetConsoleMode(hConsole, &mode);
     mode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
     SetConsoleMode(hConsole, mode);
-    
+
     // Set console title
     SetConsoleTitleA("BBC Baseball Simulation (1961)");
 }
+#endif
 
 // Convert string to uppercase
 void to_uppercase(char* str) {
@@ -74,7 +84,7 @@ void to_uppercase(char* str) {
 // Find player by name in roster
 Player* find_player(const char* name) {
     char search_name[MAX_NAME_LEN];
-    strncpy_s(search_name, sizeof(search_name), name, _TRUNCATE);
+    SAFE_STRCPY(search_name, name, sizeof(search_name));
     to_uppercase(search_name);
     
     // Check if input is in jersey number format (e.g., "99NYY" or "99-NYY")
@@ -87,7 +97,7 @@ Player* find_player(const char* name) {
         // Format with hyphen: "99-NYY"
         *dash = '\0';
         jersey_num = atoi(search_name);
-        strncpy_s(team_abbr, sizeof(team_abbr), dash + 1, _TRUNCATE);
+        SAFE_STRCPY(team_abbr, dash + 1, sizeof(team_abbr));
     } else {
         // Try format without hyphen: "99NYY"
         // Extract leading digits
@@ -99,10 +109,10 @@ Player* find_player(const char* name) {
         if (i > 0 && search_name[i] != '\0') {
             // We have digits followed by letters
             char jersey_str[MAX_NAME_LEN];
-            strncpy_s(jersey_str, sizeof(jersey_str), search_name, i);
+            strncpy(jersey_str, search_name, i);
             jersey_str[i] = '\0';
             jersey_num = atoi(jersey_str);
-            strncpy_s(team_abbr, sizeof(team_abbr), search_name + i, _TRUNCATE);
+            SAFE_STRCPY(team_abbr, search_name + i, sizeof(team_abbr));
         }
     }
     
@@ -112,8 +122,8 @@ Player* find_player(const char* name) {
             if (player_roster[i].j_num == jersey_num) {
                 // Check if team matches
                 char player_team_upper[MAX_TEAM_NAME_LEN];
-                strncpy_s(player_team_upper, sizeof(player_team_upper), 
-                         player_roster[i].team, _TRUNCATE);
+                SAFE_STRCPY(player_team_upper, player_roster[i].team,
+                           sizeof(player_team_upper));
                 to_uppercase(player_team_upper);
                 
                 if (strcmp(player_team_upper, team_abbr) == 0) {
@@ -731,8 +741,10 @@ void print_final_score(GameState* game) {
 int main(void) {
     char date_input[32];
     char time_input[32];
-    
+
+#ifndef UNIVAC
     console_setup();
+#endif
     initialize_roster();
     
     print_header();
@@ -740,13 +752,13 @@ int main(void) {
     // Get date and time for random seed
     printf("TODAYS DATE IS >");
     if (fgets(date_input, sizeof(date_input), stdin) == NULL) {
-        strcpy_s(date_input, sizeof(date_input), "111");
+        SAFE_STRCPY(date_input, "111", sizeof(date_input));
     }
     date_input[strcspn(date_input, "\n")] = 0;
-    
+
     printf("\n\nTHE TIME IS >");
     if (fgets(time_input, sizeof(time_input), stdin) == NULL) {
-        strcpy_s(time_input, sizeof(time_input), "343");
+        SAFE_STRCPY(time_input, "343", sizeof(time_input));
     }
     time_input[strcspn(time_input, "\n")] = 0;
     

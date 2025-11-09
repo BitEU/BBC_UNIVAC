@@ -397,7 +397,7 @@ def main():
             else:
                 failed += 1
             
-            # Be polite to the server - add a delay between request
+            # Be polite to the server - add a delay between requests
             time.sleep(2)
         
         # Download uniform numbers and add to all CSV files
