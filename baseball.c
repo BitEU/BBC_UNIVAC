@@ -88,6 +88,9 @@ void init_game(GameState* game) {
     game->inning = 1;
     game->rand_seed1 = g_rand_seed1;
     game->rand_seed2 = g_rand_seed2;
+    game->half_inning_runs = 0;
+    game->half_inning_hits = 0;
+    game->half_inning_errors = 0;
 }
 
 // Clear bases
@@ -286,20 +289,32 @@ PlayType determine_play_result(Player* batter, GameState* game) {
 }
 
 // Print play result with descriptive text
-void print_play_result(Player* batter, PlayType play, int runs_scored) {
+void print_play_result(Player* batter, PlayType play, int runs_scored, GameState* game) {
     printf("%s UP  ", batter->name);
     
     const char* location;
+    int variant;
+    
     switch (play) {
         case PLAY_SINGLE:
+            variant = random_number(1, 10);
             location = field_locations[random_number(0, 9)];
-            printf("SINGLE TO %s", location);
+            if (variant <= 2) {
+                printf("SINGLE OVER %s", location);
+            } else if (variant <= 3) {
+                printf("INF. HIT TO %s", location);
+            } else {
+                printf("SINGLE TO %s", location);
+            }
             break;
             
         case PLAY_DOUBLE:
             location = field_locations[random_number(0, 4)];
-            if (random_number(1, 3) == 1) {
+            variant = random_number(1, 10);
+            if (variant <= 2) {
                 printf("TEXAS LEAGER DOUBLE TO %s", location);
+            } else if (variant <= 3) {
+                printf("DOUBLE OVER %s", location);
             } else {
                 printf("DOUBLE TO %s", location);
             }
@@ -311,27 +326,44 @@ void print_play_result(Player* batter, PlayType play, int runs_scored) {
             break;
             
         case PLAY_HOME_RUN:
+            variant = random_number(1, 10);
             location = field_locations[random_number(0, 2)];
-            if (random_number(1, 2) == 1) {
+            if (variant <= 3) {
                 printf("HOMER  TO %s", location);
-            } else {
+            } else if (variant <= 4) {
                 printf("BLAST OVER C F WALL");
+            } else {
+                printf("HOME RUN TO %s", location);
             }
             break;
             
         case PLAY_GROUND_OUT:
             location = field_locations[random_number(5, 9)];
-            printf("GROUNDER TO %s", location);
+            variant = random_number(1, 10);
+            if (variant <= 2 && game->bases[0]) {
+                printf("GROUNDER TO %s BATTER SAFE AT FIRST RUNNER OUT AT SECOND", location);
+            } else if (variant <= 3 && game->bases[0] && game->bases[1]) {
+                printf("GROUNDER TO %s BATTER SAFE AT FIRST RUNNER OUT IN RUNDOWN", location);
+            } else if (variant <= 4 && game->bases[2] && game->outs < 2) {
+                printf("GROUNDER TO %s BATTER SAFE AT FIRST RUNNER OUT AT HOME", location);
+            } else {
+                printf("GROUNDER TO %s", location);
+            }
             break;
             
         case PLAY_FLY_OUT:
             location = field_locations[random_number(0, 4)];
-            if (random_number(1, 3) == 1) {
+            variant = random_number(1, 10);
+            if (variant <= 2) {
                 printf("LONG FLY TO %s", location);
-            } else if (random_number(1, 2) == 1) {
-                printf("FLY BALL TO %s", location);
-            } else {
+            } else if (variant <= 3) {
                 printf("SHORT FLY TO %s", location);
+            } else if (variant <= 4) {
+                printf("POP FLY TO %s", location);
+            } else if (variant <= 5) {
+                printf("FOUL OUT TO %s", location);
+            } else {
+                printf("FLY BALL TO %s", location);
             }
             break;
             
@@ -457,6 +489,7 @@ void execute_play(GameState* game, PlayType play, Player* batter) {
             advance_runners(game, 1);
             game->bases[0] = 1;
             (*hits)++;
+            game->half_inning_hits++;
             break;
             
         case PLAY_DOUBLE:
@@ -464,6 +497,7 @@ void execute_play(GameState* game, PlayType play, Player* batter) {
             advance_runners(game, 2);
             game->bases[1] = 1;
             (*hits)++;
+            game->half_inning_hits++;
             break;
             
         case PLAY_TRIPLE:
@@ -471,6 +505,7 @@ void execute_play(GameState* game, PlayType play, Player* batter) {
             clear_bases(game);
             game->bases[2] = 1;
             (*hits)++;
+            game->half_inning_hits++;
             break;
             
         case PLAY_HOME_RUN:
@@ -480,6 +515,7 @@ void execute_play(GameState* game, PlayType play, Player* batter) {
             }
             clear_bases(game);
             (*hits)++;
+            game->half_inning_hits++;
             break;
             
         case PLAY_WALK:
@@ -499,6 +535,7 @@ void execute_play(GameState* game, PlayType play, Player* batter) {
             advance_runners(game, 1);
             game->bases[0] = 1;
             (*errors)++;
+            game->half_inning_errors++;
             break;
             
         case PLAY_DOUBLE_PLAY:
@@ -540,53 +577,57 @@ void execute_play(GameState* game, PlayType play, Player* batter) {
     } else {
         game->visiting_score += runs;
     }
+    game->half_inning_runs += runs;
     
-    print_play_result(batter, play, runs);
+    print_play_result(batter, play, runs, game);
     
     // Occasionally show base situation
     if (random_number(1, 3) == 1 && (game->bases[0] || game->bases[1] || game->bases[2])) {
         print_base_situation(game);
         printf("\n");
     }
-    
-    // Handle base stealing
-    if (random_number(1, 15) == 1 && game->bases[0] && game->outs < 2) {
-        printf("RUNNER STEALS SECOND\n");
-        game->bases[1] = 1;
-        game->bases[0] = 0;
-    }
 }
 
 // Play at bat
 void play_at_bat(GameState* game, Player* batter) {
+    // Handle base stealing before the at-bat
+    if (random_number(1, 12) == 1 && game->bases[0] && !game->bases[1] && game->outs < 2) {
+        printf("RUNNER STEALS SECOND\n");
+        game->bases[1] = 1;
+        game->bases[0] = 0;
+    } else if (random_number(1, 20) == 1 && game->bases[0] && game->bases[1] && !game->bases[2] && game->outs < 2) {
+        printf("RUNNER STEALS SECOND\n");
+        game->bases[1] = 1;
+        game->bases[0] = 0;
+    } else if (random_number(1, 25) == 1 && game->bases[0] && game->outs < 2) {
+        printf("RUNNER OUT STEALING SECOND\n");
+        game->bases[0] = 0;
+        game->outs++;
+        if (game->outs >= 3) return;
+    }
+    
     PlayType play = determine_play_result(batter, game);
     execute_play(game, play, batter);
 }
 
 // Print inning summary
 void print_inning_summary(GameState* game) {
-    int runs = game->is_bottom ? 
-        (game->home_score - (game->inning > 1 ? game->home_score : 0)) : 
-        (game->visiting_score - (game->inning > 1 ? game->visiting_score : 0));
-    int hits = game->is_bottom ? game->home_hits : game->visiting_hits;
-    int errors = game->is_bottom ? game->home_errors : game->visiting_errors;
-    
-    printf("\n%d RUNS  %d HITS  %d ERRORS\n\n",
-        game->is_bottom ? (game->home_score) : (game->visiting_score), 
-        hits, errors);
+    printf("\n%d RUNS  %d HITS  %d ERRORS\n",
+        game->half_inning_runs, 
+        game->half_inning_hits, 
+        game->half_inning_errors);
 }
 
 // Play game
 void play_game(GameState* game) {
-    int inning_runs_v = 0, inning_runs_h = 0;
-    int inning_hits_v = 0, inning_hits_h = 0;
-    
     while (game->inning <= MAX_INNINGS || game->visiting_score == game->home_score) {
         // Top of inning (visitors bat)
         game->is_bottom = 0;
         game->outs = 0;
         clear_bases(game);
-        inning_hits_v = game->visiting_hits;
+        game->half_inning_runs = 0;
+        game->half_inning_hits = 0;
+        game->half_inning_errors = 0;
         
         while (game->outs < 3) {
             Player* batter = game->visiting_team[game->current_batter];
@@ -594,13 +635,15 @@ void play_game(GameState* game) {
             game->current_batter = (game->current_batter + 1) % TEAM_SIZE;
         }
         
-        inning_runs_v = game->visiting_score;
+        print_inning_summary(game);
         
         // Bottom of inning (home team bats)
         game->is_bottom = 1;
         game->outs = 0;
         clear_bases(game);
-        inning_hits_h = game->home_hits;
+        game->half_inning_runs = 0;
+        game->half_inning_hits = 0;
+        game->half_inning_errors = 0;
         
         while (game->outs < 3) {
             Player* batter = game->home_team[game->current_batter];
@@ -608,7 +651,7 @@ void play_game(GameState* game) {
             game->current_batter = (game->current_batter + 1) % TEAM_SIZE;
         }
         
-        inning_runs_h = game->home_score;
+        print_inning_summary(game);
         
         printf("\nEND OF INNING %d    SCORE %d %d\n\n",
             game->inning, game->visiting_score, game->home_score);

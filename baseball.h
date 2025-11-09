@@ -71,6 +71,10 @@ typedef struct {
     int current_batter;
     unsigned int rand_seed1;
     unsigned int rand_seed2;
+    // Track half-inning stats
+    int half_inning_runs;
+    int half_inning_hits;
+    int half_inning_errors;
 } GameState;
 
 // Play result types
@@ -119,7 +123,7 @@ int calculate_runs_scored(GameState* game, int bases_to_advance);
 // Output functions
 void print_header(void);
 void print_lineup(const char* team_name, Player* team[]);
-void print_play_result(Player* batter, PlayType play, int detail);
+void print_play_result(Player* batter, PlayType play, int runs_scored, GameState* game);
 void print_inning_summary(GameState* game);
 void print_final_score(GameState* game);
 void print_base_situation(GameState* game);
