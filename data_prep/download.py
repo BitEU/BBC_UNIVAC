@@ -52,7 +52,10 @@ MLB_TEAMS = {
 YEAR = 2025
 BASE_URL = "https://www.baseball-reference.com/teams/{team}/{year}.shtml"
 UNIFORMS_URL = "https://www.baseball-reference.com/leagues/majors/{year}-uniform-numbers.shtml"
-OUTPUT_DIR = "team_data"
+# When the script runs from data_prep/, make sure team_data refers to the repo root's team_data
+from pathlib import Path
+REPO_ROOT = Path(__file__).resolve().parent.parent
+OUTPUT_DIR = str(REPO_ROOT / 'team_data')
 
 
 def extract_table_from_html(html_content, table_id='players_standard_batting'):

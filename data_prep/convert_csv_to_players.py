@@ -7,6 +7,11 @@ Also generates World Series 2024 rosters (LAD vs NYY)
 import csv
 import re
 import os
+from pathlib import Path
+
+# Determine repository root (one level up from data_prep)
+REPO_ROOT = Path(__file__).resolve().parent.parent
+TEAM_DATA_DIR = REPO_ROOT / 'team_data'
 
 # Team codes for full roster
 ALL_STAR_TEAMS = ['NYY', 'NYM', 'LAD', 'BOS', 'BAL', 'CHC']
@@ -301,14 +306,15 @@ def process_roster(teams_to_process, output_c_file, output_md_file, max_per_posi
     # Process each team
     for team_code in teams_to_process:
         csv_filename = f'{team_code}_2025_batting.csv'
-        csv_path = os.path.join('team_data', csv_filename)
+        # Use the team_data directory located at the repository root
+        csv_path = TEAM_DATA_DIR / csv_filename
         
-        if not os.path.exists(csv_path):
+        if not csv_path.exists():
             print(f"Warning: {csv_path} not found, skipping...")
             continue
         
         print(f"Processing {team_code}...")
-        players = read_csv_and_extract_players(csv_path, team_code)
+        players = read_csv_and_extract_players(str(csv_path), team_code)
         print(f"  Found {len(players)} players")
         all_players.extend(players)
     
@@ -317,20 +323,22 @@ def process_roster(teams_to_process, output_c_file, output_md_file, max_per_posi
     # Generate C code
     c_code = generate_c_code(all_players, teams_to_process, max_per_position, header_comment)
     
-    # Write to C file
-    with open(output_c_file, 'w', encoding='utf-8') as f:
+    # Ensure output paths are written to the repository root
+    output_c_path = REPO_ROOT / output_c_file
+    with open(output_c_path, 'w', encoding='utf-8') as f:
         f.write(c_code)
     
-    print(f"Generated {output_c_file} successfully!")
+    print(f"Generated {output_c_path} successfully!")
     
     # Generate markdown table
     markdown_content = generate_markdown_table(all_players, teams_to_process, max_per_position, md_title, md_subtitle)
     
-    # Write to markdown file
-    with open(output_md_file, 'w', encoding='utf-8') as f:
+    # Write to markdown file at repository root
+    output_md_path = REPO_ROOT / output_md_file
+    with open(output_md_path, 'w', encoding='utf-8') as f:
         f.write(markdown_content)
     
-    print(f"Generated {output_md_file} successfully!")
+    print(f"Generated {output_md_path} successfully!")
     print()
 
 
