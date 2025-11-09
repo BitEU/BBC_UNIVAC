@@ -51,6 +51,9 @@ int weighted_random(int batting_avg) {
 
 // Console setup for Windows
 void console_setup(void) {
+    // Set console code page to UTF-8 for proper character display
+    SetConsoleOutputCP(CP_UTF8);
+    
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     DWORD mode;
     GetConsoleMode(hConsole, &mode);
@@ -74,17 +77,37 @@ Player* find_player(const char* name) {
     strncpy_s(search_name, sizeof(search_name), name, _TRUNCATE);
     to_uppercase(search_name);
     
-    // Check if input is in jersey number format (e.g., "99-NYY")
+    // Check if input is in jersey number format (e.g., "99NYY" or "99-NYY")
+    // First try to parse as number followed by team code
+    int jersey_num = 0;
+    char team_abbr[MAX_TEAM_NAME_LEN] = {0};
     char* dash = strchr(search_name, '-');
+    
     if (dash != NULL) {
-        // Jersey number format: extract number and team
-        *dash = '\0';  // Split at the dash
-        char* jersey_str = search_name;
-        char* team_abbr = dash + 1;
+        // Format with hyphen: "99-NYY"
+        *dash = '\0';
+        jersey_num = atoi(search_name);
+        strncpy_s(team_abbr, sizeof(team_abbr), dash + 1, _TRUNCATE);
+    } else {
+        // Try format without hyphen: "99NYY"
+        // Extract leading digits
+        int i = 0;
+        while (search_name[i] && isdigit((unsigned char)search_name[i])) {
+            i++;
+        }
         
-        int jersey_num = atoi(jersey_str);
-        
-        // Search for player with matching jersey number and team
+        if (i > 0 && search_name[i] != '\0') {
+            // We have digits followed by letters
+            char jersey_str[MAX_NAME_LEN];
+            strncpy_s(jersey_str, sizeof(jersey_str), search_name, i);
+            jersey_str[i] = '\0';
+            jersey_num = atoi(jersey_str);
+            strncpy_s(team_abbr, sizeof(team_abbr), search_name + i, _TRUNCATE);
+        }
+    }
+    
+    // If we successfully parsed a jersey number and team, search for it
+    if (jersey_num > 0 && strlen(team_abbr) > 0) {
         for (int i = 0; i < MAX_PLAYERS; i++) {
             if (player_roster[i].j_num == jersey_num) {
                 // Check if team matches
