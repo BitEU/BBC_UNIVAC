@@ -12,6 +12,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from bs4 import BeautifulSoup
 import time
 import os
+import hashlib
 from pathlib import Path
 
 # MLB Team codes for Baseball Reference
@@ -50,6 +51,7 @@ MLB_TEAMS = {
 
 YEAR = 2025
 BASE_URL = "https://www.baseball-reference.com/teams/{team}/{year}.shtml"
+UNIFORMS_URL = "https://www.baseball-reference.com/leagues/majors/{year}-uniform-numbers.shtml"
 OUTPUT_DIR = "team_data"
 
 
@@ -131,13 +133,38 @@ def table_to_csv(table):
     return '\n'.join(csv_lines)
 
 
+def calculate_content_hash(content):
+    """
+    Calculate SHA256 hash of content string.
+    """
+    return hashlib.sha256(content.encode('utf-8')).hexdigest()
+
+
+def get_existing_file_hash(filepath):
+    """
+    Get the hash of an existing CSV file if it exists.
+    """
+    if not os.path.exists(filepath):
+        return None
+    
+    try:
+        with open(filepath, 'r', encoding='utf-8-sig') as f:
+            content = f.read()
+        return calculate_content_hash(content)
+    except Exception as e:
+        print(f"  Warning: Could not read existing file for comparison: {e}")
+        return None
+
+
 def download_team_stats(driver, team_code, team_name, year=YEAR):
     """
     Download batting statistics for a specific team using Selenium.
+    Skips download if content hash matches existing file.
     """
     url = BASE_URL.format(team=team_code, year=year)
+    output_file = os.path.join(OUTPUT_DIR, f"{team_code}_{year}_batting.csv")
     
-    print(f"Downloading {team_name} ({team_code})...")
+    print(f"Checking {team_name} ({team_code})...")
     
     try:
         # Navigate to the page
@@ -162,12 +189,24 @@ def download_team_stats(driver, team_code, team_name, year=YEAR):
             csv_content = table_to_csv(table)
             
             if csv_content:
+                # Calculate hash of new content
+                new_hash = calculate_content_hash(csv_content)
+                
+                # Check if file exists and compare hashes
+                existing_hash = get_existing_file_hash(output_file)
+                
+                if existing_hash == new_hash:
+                    print(f"  ↷ Skipped (unchanged) - {output_file}")
+                    return True
+                
                 # Save to file with UTF-8 encoding and BOM for Excel compatibility
-                output_file = os.path.join(OUTPUT_DIR, f"{team_code}_{year}_batting.csv")
                 with open(output_file, 'w', encoding='utf-8-sig', newline='') as f:
                     f.write(csv_content)
                 
-                print(f"  ✓ Saved to {output_file}")
+                if existing_hash:
+                    print(f"  ✓ Updated {output_file}")
+                else:
+                    print(f"  ✓ Saved to {output_file}")
                 return True
             else:
                 print(f"  ✗ Could not convert table to CSV")
@@ -178,6 +217,120 @@ def download_team_stats(driver, team_code, team_name, year=YEAR):
             
     except Exception as e:
         print(f"  ✗ Error: {e}")
+        return False
+
+
+def download_uniform_numbers(driver, year=YEAR):
+    """
+    Download uniform numbers for all teams and return a dict mapping
+    (player_name, team_code) -> jersey_number
+    """
+    url = UNIFORMS_URL.format(year=year)
+    print(f"\nDownloading uniform numbers from {url}...")
+    
+    try:
+        driver.get(url)
+        time.sleep(3)  # Give it time to load
+        
+        page_source = driver.page_source
+        soup = BeautifulSoup(page_source, 'html.parser')
+        
+        # Dictionary to store jersey numbers: (player_name, team_code) -> number
+        jersey_dict = {}
+        
+        # Find all tables with jersey numbers
+        # Each table has a caption with the number, and td elements with player (TEAM)
+        tables = soup.find_all('table', {'class': 'no_columns'})
+        
+        for table in tables:
+            # Get the jersey number from caption
+            caption = table.find('caption')
+            if not caption:
+                continue
+            
+            jersey_num = caption.get_text(strip=True)
+            
+            # Get all players with this number
+            td_elements = table.find_all('td')
+            for td in td_elements:
+                text = td.get_text(strip=True)
+                # Text format is "Player Name (TEAM)"
+                if '(' in text and ')' in text:
+                    # Extract player name and team
+                    player_name = text[:text.rfind('(')].strip()
+                    team_code = text[text.rfind('(')+1:text.rfind(')')].strip()
+                    
+                    # Store in dictionary
+                    jersey_dict[(player_name, team_code)] = jersey_num
+        
+        print(f"  ✓ Downloaded {len(jersey_dict)} jersey number assignments")
+        return jersey_dict
+        
+    except Exception as e:
+        print(f"  ✗ Error downloading uniform numbers: {e}")
+        return {}
+
+
+def add_jersey_numbers_to_csv(csv_file, team_code, jersey_dict):
+    """
+    Add a j_num column to a team's CSV file with jersey numbers.
+    """
+    try:
+        # Read the CSV
+        with open(csv_file, 'r', encoding='utf-8-sig') as f:
+            lines = f.readlines()
+        
+        if not lines:
+            return False
+        
+        # Parse header
+        header = lines[0].strip()
+        
+        # Check if j_num already exists
+        if ',j_num' in header or header.endswith('j_num'):
+            print(f"    j_num column already exists in {csv_file}")
+            return True
+        
+        # Add j_num to header
+        new_header = header + ',j_num\n'
+        new_lines = [new_header]
+        
+        # Process each data row
+        for line in lines[1:]:
+            if not line.strip():
+                continue
+            
+            # Split the CSV line (handle quoted fields)
+            import csv
+            import io
+            reader = csv.reader(io.StringIO(line))
+            row = next(reader)
+            
+            # Get player name (usually first column after rank)
+            # The 'player' column typically has the name
+            player_name = ''
+            for cell in row:
+                # Clean up player name (remove * and # symbols)
+                cleaned = cell.strip().replace('*', '').replace('#', '')
+                if cleaned and not cleaned.isdigit():
+                    player_name = cleaned
+                    break
+            
+            # Look up jersey number
+            jersey_num = jersey_dict.get((player_name, team_code), '')
+            
+            # Add jersey number to the end of the row
+            new_line = line.strip() + f',{jersey_num}\n'
+            new_lines.append(new_line)
+        
+        # Write back to file
+        with open(csv_file, 'w', encoding='utf-8-sig') as f:
+            f.writelines(new_lines)
+        
+        return True
+        
+    except Exception as e:
+        print(f"    ✗ Error adding jersey numbers to {csv_file}: {e}")
         return False
 
 
@@ -213,20 +366,56 @@ def main():
     try:
         successful = 0
         failed = 0
+        skipped = 0
+        updated = 0
+        new_files = 0
         
         for team_code, team_name in MLB_TEAMS.items():
-            if download_team_stats(driver, team_code, team_name):
+            output_file = os.path.join(OUTPUT_DIR, f"{team_code}_{YEAR}_batting.csv")
+            file_existed = os.path.exists(output_file)
+            
+            result = download_team_stats(driver, team_code, team_name)
+            
+            if result:
                 successful += 1
+                # Check if it was actually written (not skipped)
+                if os.path.exists(output_file):
+                    # Read the file to check if it was just written
+                    file_mtime = os.path.getmtime(output_file)
+                    current_time = time.time()
+                    just_written = (current_time - file_mtime) < 5  # Written in last 5 seconds
+                    
+                    if "Skipped" in str(result) or not just_written and file_existed:
+                        skipped += 1
+                    elif file_existed:
+                        updated += 1
+                    else:
+                        new_files += 1
             else:
                 failed += 1
             
             # Be polite to the server - add a delay between requests
             time.sleep(2)
         
+        # Download uniform numbers and add to all CSV files
+        print("\n" + "=" * 50)
+        jersey_dict = download_uniform_numbers(driver, YEAR)
+        
+        if jersey_dict:
+            print("\nAdding jersey numbers to CSV files...")
+            for team_code in MLB_TEAMS.keys():
+                output_file = os.path.join(OUTPUT_DIR, f"{team_code}_{YEAR}_batting.csv")
+                if os.path.exists(output_file):
+                    print(f"  Processing {team_code}...")
+                    add_jersey_numbers_to_csv(output_file, team_code, jersey_dict)
+        
         print("\n" + "=" * 50)
         print(f"Download complete!")
-        print(f"Successful: {successful}/{len(MLB_TEAMS)}")
-        print(f"Failed: {failed}/{len(MLB_TEAMS)}")
+        print(f"Total: {len(MLB_TEAMS)} teams")
+        print(f"Successful: {successful}")
+        print(f"Failed: {failed}")
+        if skipped > 0:
+            print(f"Skipped (unchanged): {skipped}")
         
     finally:
         # Always close the browser

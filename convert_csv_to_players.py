@@ -41,9 +41,7 @@ def clean_player_name(name):
     # Remove common suffixes and special characters
     cleaned = re.sub(r'[*\-?#]+$', '', name)
     cleaned = cleaned.strip()
-    # Limit to 9 characters to fit in C name field
-    if len(cleaned) > 9:
-        cleaned = cleaned[:9]
+    # Keep full name, uppercase
     return cleaned.upper()
 
 
@@ -75,16 +73,9 @@ def parse_position(team_position_str):
 
 
 def get_team_abbreviation(team_code):
-    """Convert team code to team name used in original data"""
-    team_names = {
-        'NYY': 'YANKS',
-        'NYM': 'METS',
-        'LAD': 'DODGERS',
-        'BOS': 'SOX',
-        'BAL': 'ORIOLES',
-        'CHC': 'CUBS'
-    }
-    return team_names.get(team_code, team_code)
+    """Convert team code to 3-letter abbreviation"""
+    # Keep the team codes as-is (NYY, NYM, LAD, etc.)
+    return team_code
 
 
 def read_csv_and_extract_players(csv_path, team_code):
@@ -118,6 +109,13 @@ def read_csv_and_extract_players(csv_path, team_code):
             if not name_display:
                 continue
             
+            # Get jersey number
+            j_num_str = row.get('j_num', '').strip()
+            try:
+                j_num = int(j_num_str) if j_num_str else 0
+            except ValueError:
+                j_num = 0
+            
             # Determine position
             pos_enum, pos_value = parse_position(team_position)
             
@@ -128,7 +126,8 @@ def read_csv_and_extract_players(csv_path, team_code):
                 'batting_avg': batting_avg_int,
                 'hand': determine_handedness(name_display),
                 'position': pos_enum,
-                'pos_value': pos_value
+                'pos_value': pos_value,
+                'j_num': j_num
             }
             
             players.append(player)
@@ -193,12 +192,68 @@ def generate_c_code(all_players):
             # Line 2: year and team
             lines.append(f'    player_roster[i].year = {player["year"]}; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "{player["team"]}");')
             
-            # Line 3: batting_avg, hand, and position with increment
-            lines.append(f'    player_roster[i].batting_avg = {player["batting_avg"]}; player_roster[i].hand = {player["hand"]}; player_roster[i++].position = {player["position"]};')
+            # Line 3: batting_avg, hand, position, and j_num with increment
+            lines.append(f'    player_roster[i].batting_avg = {player["batting_avg"]}; player_roster[i].hand = {player["hand"]}; player_roster[i].position = {player["position"]}; player_roster[i++].j_num = {player["j_num"]};')
             
             lines.append("    ")
     
     lines.append("}")
+    
+    return '\n'.join(lines)
+
+
+def generate_markdown_table(all_players):
+    """Generate markdown table with player information"""
+    lines = []
+    lines.append("# BBC Baseball Player Roster")
+    lines.append("")
+    lines.append("Generated from team CSV data")
+    lines.append("")
+    lines.append("| Name | Jersey # | Team | Batting Avg | Hand | Position |")
+    lines.append("|------|----------|------|-------------|------|----------|")
+    
+    # Group players by position
+    position_groups = {}
+    for player in all_players:
+        pos_val = player['pos_value']
+        if pos_val not in position_groups:
+            position_groups[pos_val] = []
+        position_groups[pos_val].append(player)
+    
+    # Position names for headers
+    position_names = {
+        0: "First Base",
+        10: "Second Base",
+        20: "Third Base",
+        30: "Shortstop",
+        40: "Left Field",
+        50: "Center Field",
+        60: "Right Field",
+        70: "Catcher",
+        80: "Pitcher"
+    }
+    
+    # Generate table rows for each position group
+    for pos_val in sorted(position_groups.keys()):
+        players = position_groups[pos_val]
+        pos_name = position_names.get(pos_val, "Unknown")
+        
+        # Limit to 10 players per position
+        players = players[:10]
+        
+        # Add position header
+        lines.append(f"| **{pos_name}** | | | | | |")
+        
+        for player in players:
+            # Format batting average as .XXX
+            ba_formatted = f".{player['batting_avg']:03d}"
+            hand_str = player['hand'].replace('HAND_', '')
+            
+            lines.append(f"| {player['name']} | {player['j_num']} | {player['team']} | {ba_formatted} | {hand_str} | {pos_name} |")
+    
+    lines.append("")
+    lines.append(f"**Total Players: {sum(len(position_groups[pos][:10]) for pos in position_groups)}**")
+    lines.append("")
     
     return '\n'.join(lines)
 
@@ -235,6 +290,16 @@ def main():
         f.write(c_code)
     
     print(f"\nGenerated {output_path} successfully!")
+    
+    # Generate markdown table
+    markdown_content = generate_markdown_table(all_players)
+    
+    # Write to markdown file
+    markdown_path = 'player_roster.md'
+    with open(markdown_path, 'w', encoding='utf-8') as f:
+        f.write(markdown_content)
+    
+    print(f"Generated {markdown_path} successfully!")
 
 
 if __name__ == '__main__':

@@ -74,6 +74,34 @@ Player* find_player(const char* name) {
     strncpy_s(search_name, sizeof(search_name), name, _TRUNCATE);
     to_uppercase(search_name);
     
+    // Check if input is in jersey number format (e.g., "99-NYY")
+    char* dash = strchr(search_name, '-');
+    if (dash != NULL) {
+        // Jersey number format: extract number and team
+        *dash = '\0';  // Split at the dash
+        char* jersey_str = search_name;
+        char* team_abbr = dash + 1;
+        
+        int jersey_num = atoi(jersey_str);
+        
+        // Search for player with matching jersey number and team
+        for (int i = 0; i < MAX_PLAYERS; i++) {
+            if (player_roster[i].j_num == jersey_num) {
+                // Check if team matches
+                char player_team_upper[MAX_TEAM_NAME_LEN];
+                strncpy_s(player_team_upper, sizeof(player_team_upper), 
+                         player_roster[i].team, _TRUNCATE);
+                to_uppercase(player_team_upper);
+                
+                if (strcmp(player_team_upper, team_abbr) == 0) {
+                    return &player_roster[i];
+                }
+            }
+        }
+        return NULL;
+    }
+    
+    // Traditional name-based search
     for (int i = 0; i < MAX_PLAYERS; i++) {
         if (strcmp(player_roster[i].name, search_name) == 0) {
             return &player_roster[i];

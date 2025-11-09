@@ -20,7 +20,7 @@
 // Constants
 #define MAX_PLAYERS 90
 #define TEAM_SIZE 9
-#define MAX_NAME_LEN 10
+#define MAX_NAME_LEN 30
 #define MAX_TEAM_NAME_LEN 20
 #define MAX_INNINGS 9
 
@@ -52,6 +52,7 @@ typedef struct {
     int batting_avg;  // stored as integer (e.g., 393 for .393)
     Handedness hand;
     int position;
+    int j_num;  // Jersey number
 } Player;
 
 // Game state structure
