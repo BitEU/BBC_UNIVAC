@@ -1,14 +1,18 @@
 #!/usr/bin/env python3
 """
 Convert team batting CSV files to C code format for players.c
+Also generates World Series 2024 rosters (LAD vs NYY)
 """
 
 import csv
 import re
 import os
 
-# Team codes to process
-TEAMS_TO_PROCESS = ['NYY', 'NYM', 'LAD', 'BOS', 'BAL', 'CHC']
+# Team codes for full roster
+ALL_STAR_TEAMS = ['NYY', 'NYM', 'LAD', 'BOS', 'BAL', 'CHC']
+
+# Team codes for World Series 2024
+WORLD_SERIES_TEAMS = ['LAD', 'NYY']
 
 # Position mapping from CSV to C enum values
 POSITION_MAP = {
@@ -138,21 +142,26 @@ def read_csv_and_extract_players(csv_path, team_code):
     return players
 
 
-def generate_c_code(all_players, max_per_position=18):
+def generate_c_code(all_players, teams_to_process, max_per_position=18, header_comment="162 all-star players with balanced team distribution"):
     """Generate C code for initialize_roster function"""
     lines = []
     lines.append("/*")
     lines.append(" * Player Roster Data")
-    lines.append(f" * {max_per_position * 9} all-star players with balanced team distribution")
+    lines.append(f" * {header_comment}")
     lines.append(" */")
     lines.append("")
     lines.append('#include "baseball.h"')
     lines.append("")
     lines.append("Player player_roster[MAX_PLAYERS];")
     lines.append("")
+    lines.append("static int idx=0;")
+    lines.append("static void P(char*n,int y,char*t,int a,char h,int p,int j){")
+    lines.append("strcpy(player_roster[idx].name,n);player_roster[idx].year=y;strcpy(player_roster[idx].team,t);")
+    lines.append("player_roster[idx].batting_avg=a;player_roster[idx].hand=h;player_roster[idx].position=p;")
+    lines.append("player_roster[idx++].j_num=j;}")
+    lines.append("")
     lines.append("void initialize_roster(void) {")
-    lines.append("    int i = 0;")
-    lines.append("    ")
+    lines.append("idx=0;")
     
     # Group players by position AND team
     position_groups = {}
@@ -175,6 +184,13 @@ def generate_c_code(all_players, max_per_position=18):
         80: "Pitcher"
     }
     
+    # Hand mapping to character
+    hand_map = {
+        'HAND_LEFT': 'L',
+        'HAND_RIGHT': 'R',
+        'HAND_BOTH': 'B'
+    }
+    
     # Generate code for each position group
     for pos_val in sorted(position_groups.keys()):
         players = position_groups[pos_val]
@@ -184,7 +200,7 @@ def generate_c_code(all_players, max_per_position=18):
         selected_players = []
         teams_processed = set()
         
-        for team_code in TEAMS_TO_PROCESS:
+        for team_code in teams_to_process:
             team_players = [p for p in players if p['team'] == team_code]
             # Sort by batting average and take top 3
             team_players.sort(key=lambda p: -p['batting_avg'])
@@ -195,31 +211,24 @@ def generate_c_code(all_players, max_per_position=18):
         selected_players.sort(key=lambda p: -p['batting_avg'])
         players = selected_players[:max_per_position]
         
-        lines.append(f"    // {pos_name} (positions {pos_val}-{pos_val+9})")
+        if players:  # Only add comment if there are players
+            lines.append(f"// {pos_name}")
         
         for player in players:
-            # Line 1: strcpy_s for name
-            lines.append(f'    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "{player["name"]}");')
-            
-            # Line 2: year and team
-            lines.append(f'    player_roster[i].year = {player["year"]}; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "{player["team"]}");')
-            
-            # Line 3: batting_avg, hand, position, and j_num with increment
-            lines.append(f'    player_roster[i].batting_avg = {player["batting_avg"]}; player_roster[i].hand = {player["hand"]}; player_roster[i].position = {player["position"]}; player_roster[i++].j_num = {player["j_num"]};')
-            
-            lines.append("    ")
+            hand_char = hand_map.get(player['hand'], 'R')
+            lines.append(f'P("{player["name"]}",{player["year"]},"{player["team"]}",{player["batting_avg"]},\'{hand_char}\',{player["position"]},{player["j_num"]});')
     
     lines.append("}")
     
     return '\n'.join(lines)
 
 
-def generate_markdown_table(all_players, max_per_position=18):
+def generate_markdown_table(all_players, teams_to_process, max_per_position=18, title="BBC Baseball Player Roster", subtitle="Generated from team CSV data (Top 3 players per team per position)"):
     """Generate markdown table with player information"""
     lines = []
-    lines.append("# BBC Baseball Player Roster")
+    lines.append(f"# {title}")
     lines.append("")
-    lines.append("Generated from team CSV data (Top 3 players per team per position)")
+    lines.append(subtitle)
     lines.append("")
     lines.append("| Name | Jersey # | Team | Batting Avg | Hand | Position |")
     lines.append("|------|----------|------|-------------|------|----------|")
@@ -245,6 +254,9 @@ def generate_markdown_table(all_players, max_per_position=18):
         80: "Pitcher"
     }
     
+    # Track total player count
+    total_player_count = 0
+    
     # Generate table rows for each position group
     for pos_val in sorted(position_groups.keys()):
         players = position_groups[pos_val]
@@ -252,7 +264,7 @@ def generate_markdown_table(all_players, max_per_position=18):
         
         # Select top 3 from each team for this position
         selected_players = []
-        for team_code in TEAMS_TO_PROCESS:
+        for team_code in teams_to_process:
             team_players = [p for p in players if p['team'] == team_code]
             team_players.sort(key=lambda p: -p['batting_avg'])
             selected_players.extend(team_players[:3])
@@ -260,6 +272,9 @@ def generate_markdown_table(all_players, max_per_position=18):
         # Sort final selection by batting average
         selected_players.sort(key=lambda p: -p['batting_avg'])
         players = selected_players[:max_per_position]
+        
+        # Add to total count
+        total_player_count += len(players)
         
         # Add position header
         lines.append(f"| **{pos_name}** | | | | | |")
@@ -272,18 +287,19 @@ def generate_markdown_table(all_players, max_per_position=18):
             lines.append(f"| {player['name']} | {player['j_num']} | {player['team']} | {ba_formatted} | {hand_str} | {pos_name} |")
     
     lines.append("")
-    lines.append(f"**Total Players: {sum(len(position_groups.get(pos, [])[:max_per_position]) for pos in position_groups)}**")
+    lines.append(f"**Total Players: {total_player_count}**")
     lines.append("")
     
     return '\n'.join(lines)
 
 
-def main():
-    """Main function to process all teams and generate players.c"""
+def process_roster(teams_to_process, output_c_file, output_md_file, max_per_position, 
+                   header_comment, md_title, md_subtitle):
+    """Process a roster configuration and generate C and markdown files"""
     all_players = []
     
     # Process each team
-    for team_code in TEAMS_TO_PROCESS:
+    for team_code in teams_to_process:
         csv_filename = f'{team_code}_2025_batting.csv'
         csv_path = os.path.join('team_data', csv_filename)
         
@@ -296,27 +312,64 @@ def main():
         print(f"  Found {len(players)} players")
         all_players.extend(players)
     
-    print(f"\nTotal players: {len(all_players)}")
+    print(f"Total players collected: {len(all_players)}")
     
-    # Generate C code with 18 players per position (top 3 from each of 6 teams)
-    c_code = generate_c_code(all_players, max_per_position=18)
+    # Generate C code
+    c_code = generate_c_code(all_players, teams_to_process, max_per_position, header_comment)
     
-    # Write to players.c
-    output_path = 'players.c'
-    with open(output_path, 'w', encoding='utf-8') as f:
+    # Write to C file
+    with open(output_c_file, 'w', encoding='utf-8') as f:
         f.write(c_code)
     
-    print(f"\nGenerated {output_path} successfully!")
+    print(f"Generated {output_c_file} successfully!")
     
-    # Generate markdown table with 18 players per position
-    markdown_content = generate_markdown_table(all_players, max_per_position=18)
+    # Generate markdown table
+    markdown_content = generate_markdown_table(all_players, teams_to_process, max_per_position, md_title, md_subtitle)
     
     # Write to markdown file
-    markdown_path = 'player_roster.md'
-    with open(markdown_path, 'w', encoding='utf-8') as f:
+    with open(output_md_file, 'w', encoding='utf-8') as f:
         f.write(markdown_content)
     
-    print(f"Generated {markdown_path} successfully!")
+    print(f"Generated {output_md_file} successfully!")
+    print()
+
+
+def main():
+    """Main function to process all rosters"""
+    print("=" * 60)
+    print("BBC BASEBALL ROSTER GENERATOR")
+    print("=" * 60)
+    print()
+    
+    # Generate All-Star roster (6 teams, 18 players per position)
+    print("Generating All-Star Roster (6 teams)...")
+    print("-" * 60)
+    process_roster(
+        teams_to_process=ALL_STAR_TEAMS,
+        output_c_file='players.c',
+        output_md_file='player_roster.md',
+        max_per_position=18,
+        header_comment="162 all-star players with balanced team distribution",
+        md_title="BBC Baseball Player Roster",
+        md_subtitle="Generated from team CSV data (Top 3 players per team per position)"
+    )
+    
+    # Generate World Series 2024 roster (2 teams, 6 players per position)
+    print("Generating World Series 2024 Roster (LAD vs NYY)...")
+    print("-" * 60)
+    process_roster(
+        teams_to_process=WORLD_SERIES_TEAMS,
+        output_c_file='World_Series_2024_players.c',
+        output_md_file='world_series_2024_roster.md',
+        max_per_position=6,
+        header_comment="World Series 2024 - LAD vs NYY (using 2025 batting data)\nTop 3 players per team per position",
+        md_title="World Series 2024 Player Roster",
+        md_subtitle="LAD vs NYY (using 2025 batting data)\nTop 3 players per team per position"
+    )
+    
+    print("=" * 60)
+    print("ALL ROSTERS GENERATED SUCCESSFULLY!")
+    print("=" * 60)
 
 
 if __name__ == '__main__':

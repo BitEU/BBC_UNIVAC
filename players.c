@@ -7,415 +7,120 @@
 
 Player player_roster[MAX_PLAYERS];
 
+static int idx=0;
+static void P(char*n,int y,char*t,int a,char h,int p,int j){
+strcpy(player_roster[idx].name,n);player_roster[idx].year=y;strcpy(player_roster[idx].team,t);
+player_roster[idx].batting_avg=a;player_roster[idx].hand=h;player_roster[idx].position=p;
+player_roster[idx++].j_num=j;}
+
 void initialize_roster(void) {
-    int i = 0;
-    
-    // First Base (positions 0-9)
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "MOISÉS BALLESTEROS");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "CHC");
-    player_roster[i].batting_avg = 298; player_roster[i].hand = HAND_LEFT; player_roster[i].position = POS_FIRST_BASE; player_roster[i++].j_num = 25;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "FREDDIE FREEMAN");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "LAD");
-    player_roster[i].batting_avg = 295; player_roster[i].hand = HAND_LEFT; player_roster[i].position = POS_FIRST_BASE; player_roster[i++].j_num = 5;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "RYAN O'HEARN");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "BAL");
-    player_roster[i].batting_avg = 283; player_roster[i].hand = HAND_LEFT; player_roster[i].position = POS_FIRST_BASE; player_roster[i++].j_num = 32;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "SHOHEI OHTANI");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "LAD");
-    player_roster[i].batting_avg = 282; player_roster[i].hand = HAND_LEFT; player_roster[i].position = POS_FIRST_BASE; player_roster[i++].j_num = 17;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "NATHANIEL LOWE");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "BOS");
-    player_roster[i].batting_avg = 280; player_roster[i].hand = HAND_LEFT; player_roster[i].position = POS_FIRST_BASE; player_roster[i++].j_num = 37;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "PAUL GOLDSCHMIDT");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "NYY");
-    player_roster[i].batting_avg = 274; player_roster[i].hand = HAND_RIGHT; player_roster[i].position = POS_FIRST_BASE; player_roster[i++].j_num = 48;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "GIANCARLO STANTON");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "NYY");
-    player_roster[i].batting_avg = 273; player_roster[i].hand = HAND_RIGHT; player_roster[i].position = POS_FIRST_BASE; player_roster[i++].j_num = 27;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "PETE ALONSO");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "NYM");
-    player_roster[i].batting_avg = 272; player_roster[i].hand = HAND_RIGHT; player_roster[i].position = POS_FIRST_BASE; player_roster[i++].j_num = 20;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "RAFAEL DEVERS");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "BOS");
-    player_roster[i].batting_avg = 272; player_roster[i].hand = HAND_LEFT; player_roster[i].position = POS_FIRST_BASE; player_roster[i++].j_num = 11;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "STARLING MARTE");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "NYM");
-    player_roster[i].batting_avg = 270; player_roster[i].hand = HAND_RIGHT; player_roster[i].position = POS_FIRST_BASE; player_roster[i++].j_num = 6;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "ROB REFSNYDER");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "BOS");
-    player_roster[i].batting_avg = 269; player_roster[i].hand = HAND_RIGHT; player_roster[i].position = POS_FIRST_BASE; player_roster[i++].j_num = 30;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "MICHAEL BUSCH");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "CHC");
-    player_roster[i].batting_avg = 261; player_roster[i].hand = HAND_LEFT; player_roster[i].position = POS_FIRST_BASE; player_roster[i++].j_num = 29;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "BEN RICE");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "NYY");
-    player_roster[i].batting_avg = 255; player_roster[i].hand = HAND_LEFT; player_roster[i].position = POS_FIRST_BASE; player_roster[i++].j_num = 22;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "EDDIE ROSARIO");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "LAD");
-    player_roster[i].batting_avg = 250; player_roster[i].hand = HAND_LEFT; player_roster[i].position = POS_FIRST_BASE; player_roster[i++].j_num = 0;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "RYAN MOUNTCASTLE");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "BAL");
-    player_roster[i].batting_avg = 250; player_roster[i].hand = HAND_RIGHT; player_roster[i].position = POS_FIRST_BASE; player_roster[i++].j_num = 6;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "SEIYA SUZUKI");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "CHC");
-    player_roster[i].batting_avg = 245; player_roster[i].hand = HAND_RIGHT; player_roster[i].position = POS_FIRST_BASE; player_roster[i++].j_num = 27;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "JESSE WINKER");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "NYM");
-    player_roster[i].batting_avg = 229; player_roster[i].hand = HAND_LEFT; player_roster[i].position = POS_FIRST_BASE; player_roster[i++].j_num = 3;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "COBY MAYO");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "BAL");
-    player_roster[i].batting_avg = 217; player_roster[i].hand = HAND_RIGHT; player_roster[i].position = POS_FIRST_BASE; player_roster[i++].j_num = 16;
-    
-    // Second Base (positions 10-19)
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "ROMY GONZÁLEZ");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "BOS");
-    player_roster[i].batting_avg = 305; player_roster[i].hand = HAND_RIGHT; player_roster[i].position = POS_SECOND_BASE; player_roster[i++].j_num = 0;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "AMED ROSARIO");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "NYY");
-    player_roster[i].batting_avg = 303; player_roster[i].hand = HAND_RIGHT; player_roster[i].position = POS_SECOND_BASE; player_roster[i++].j_num = 14;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "NICO HOERNER");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "CHC");
-    player_roster[i].batting_avg = 297; player_roster[i].hand = HAND_RIGHT; player_roster[i].position = POS_SECOND_BASE; player_roster[i++].j_num = 2;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "NATE EATON");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "BOS");
-    player_roster[i].batting_avg = 296; player_roster[i].hand = HAND_RIGHT; player_roster[i].position = POS_SECOND_BASE; player_roster[i++].j_num = 40;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "HYESEONG KIM");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "LAD");
-    player_roster[i].batting_avg = 280; player_roster[i].hand = HAND_LEFT; player_roster[i].position = POS_SECOND_BASE; player_roster[i++].j_num = 6;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "DJ LEMAHIEU");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "NYY");
-    player_roster[i].batting_avg = 266; player_roster[i].hand = HAND_RIGHT; player_roster[i].position = POS_SECOND_BASE; player_roster[i++].j_num = 26;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "JOSÉ CABALLERO");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "NYY");
-    player_roster[i].batting_avg = 266; player_roster[i].hand = HAND_RIGHT; player_roster[i].position = POS_SECOND_BASE; player_roster[i++].j_num = 72;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "JORDAN WESTBURG");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "BAL");
-    player_roster[i].batting_avg = 265; player_roster[i].hand = HAND_RIGHT; player_roster[i].position = POS_SECOND_BASE; player_roster[i++].j_num = 11;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "MIGUEL ROJAS");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "LAD");
-    player_roster[i].batting_avg = 262; player_roster[i].hand = HAND_RIGHT; player_roster[i].position = POS_SECOND_BASE; player_roster[i++].j_num = 72;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "NICK SOGARD");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "BOS");
-    player_roster[i].batting_avg = 260; player_roster[i].hand = HAND_BOTH; player_roster[i].position = POS_SECOND_BASE; player_roster[i++].j_num = 20;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "JEFF MCNEIL");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "NYM");
-    player_roster[i].batting_avg = 243; player_roster[i].hand = HAND_LEFT; player_roster[i].position = POS_SECOND_BASE; player_roster[i++].j_num = 1;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "JACKSON HOLLIDAY");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "BAL");
-    player_roster[i].batting_avg = 242; player_roster[i].hand = HAND_LEFT; player_roster[i].position = POS_SECOND_BASE; player_roster[i++].j_num = 7;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "LUISANGEL ACUÑA");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "NYM");
-    player_roster[i].batting_avg = 234; player_roster[i].hand = HAND_RIGHT; player_roster[i].position = POS_SECOND_BASE; player_roster[i++].j_num = 2;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "TOMMY EDMAN");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "LAD");
-    player_roster[i].batting_avg = 225; player_roster[i].hand = HAND_BOTH; player_roster[i].position = POS_SECOND_BASE; player_roster[i++].j_num = 25;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "VIDAL BRUJÁN");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "CHC");
-    player_roster[i].batting_avg = 222; player_roster[i].hand = HAND_BOTH; player_roster[i].position = POS_SECOND_BASE; player_roster[i++].j_num = 0;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "GAGE WORKMAN");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "CHC");
-    player_roster[i].batting_avg = 214; player_roster[i].hand = HAND_LEFT; player_roster[i].position = POS_SECOND_BASE; player_roster[i++].j_num = 25;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "JORGE MATEO");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "BAL");
-    player_roster[i].batting_avg = 177; player_roster[i].hand = HAND_RIGHT; player_roster[i].position = POS_SECOND_BASE; player_roster[i++].j_num = 3;
-    
-    // Third Base (positions 20-29)
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "ALEX BREGMAN");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "BOS");
-    player_roster[i].batting_avg = 273; player_roster[i].hand = HAND_RIGHT; player_roster[i].position = POS_THIRD_BASE; player_roster[i++].j_num = 2;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "BRETT BATY");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "NYM");
-    player_roster[i].batting_avg = 254; player_roster[i].hand = HAND_LEFT; player_roster[i].position = POS_THIRD_BASE; player_roster[i++].j_num = 7;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "EMMANUEL RIVERA");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "BAL");
-    player_roster[i].batting_avg = 250; player_roster[i].hand = HAND_RIGHT; player_roster[i].position = POS_THIRD_BASE; player_roster[i++].j_num = 26;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "RAMÓN URÍAS");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "BAL");
-    player_roster[i].batting_avg = 248; player_roster[i].hand = HAND_RIGHT; player_roster[i].position = POS_THIRD_BASE; player_roster[i++].j_num = 29;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "OSWALDO CABRERA");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "NYY");
-    player_roster[i].batting_avg = 243; player_roster[i].hand = HAND_BOTH; player_roster[i].position = POS_THIRD_BASE; player_roster[i++].j_num = 95;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "MAX MUNCY");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "LAD");
-    player_roster[i].batting_avg = 243; player_roster[i].hand = HAND_LEFT; player_roster[i].position = POS_THIRD_BASE; player_roster[i++].j_num = 13;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "MARK VIENTOS");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "NYM");
-    player_roster[i].batting_avg = 233; player_roster[i].hand = HAND_RIGHT; player_roster[i].position = POS_THIRD_BASE; player_roster[i++].j_num = 27;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "MARCELO MAYER");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "BOS");
-    player_roster[i].batting_avg = 228; player_roster[i].hand = HAND_LEFT; player_roster[i].position = POS_THIRD_BASE; player_roster[i++].j_num = 39;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "RONNY MAURICIO");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "NYM");
-    player_roster[i].batting_avg = 226; player_roster[i].hand = HAND_BOTH; player_roster[i].position = POS_THIRD_BASE; player_roster[i++].j_num = 10;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "MATT SHAW");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "CHC");
-    player_roster[i].batting_avg = 226; player_roster[i].hand = HAND_RIGHT; player_roster[i].position = POS_THIRD_BASE; player_roster[i++].j_num = 6;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "JON BERTI");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "CHC");
-    player_roster[i].batting_avg = 210; player_roster[i].hand = HAND_RIGHT; player_roster[i].position = POS_THIRD_BASE; player_roster[i++].j_num = 5;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "RYAN MCMAHON");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "NYY");
-    player_roster[i].batting_avg = 208; player_roster[i].hand = HAND_LEFT; player_roster[i].position = POS_THIRD_BASE; player_roster[i++].j_num = 19;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "OSWALD PERAZA");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "NYY");
-    player_roster[i].batting_avg = 152; player_roster[i].hand = HAND_RIGHT; player_roster[i].position = POS_THIRD_BASE; player_roster[i++].j_num = 18;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "VIMAEL MACHÍN");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "BAL");
-    player_roster[i].batting_avg = 91; player_roster[i].hand = HAND_LEFT; player_roster[i].position = POS_THIRD_BASE; player_roster[i++].j_num = 65;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "BUDDY KENNEDY");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "LAD");
-    player_roster[i].batting_avg = 59; player_roster[i].hand = HAND_RIGHT; player_roster[i].position = POS_THIRD_BASE; player_roster[i++].j_num = 46;
-    
-    // Shortstop (positions 30-39)
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "GUNNAR HENDERSON");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "BAL");
-    player_roster[i].batting_avg = 274; player_roster[i].hand = HAND_LEFT; player_roster[i].position = POS_SHORTSTOP; player_roster[i++].j_num = 2;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "FRANCISCO LINDOR");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "NYM");
-    player_roster[i].batting_avg = 267; player_roster[i].hand = HAND_BOTH; player_roster[i].position = POS_SHORTSTOP; player_roster[i++].j_num = 12;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "TREVOR STORY");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "BOS");
-    player_roster[i].batting_avg = 263; player_roster[i].hand = HAND_RIGHT; player_roster[i].position = POS_SHORTSTOP; player_roster[i++].j_num = 10;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "MOOKIE BETTS");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "LAD");
-    player_roster[i].batting_avg = 258; player_roster[i].hand = HAND_RIGHT; player_roster[i].position = POS_SHORTSTOP; player_roster[i++].j_num = 50;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "DANSBY SWANSON");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "CHC");
-    player_roster[i].batting_avg = 244; player_roster[i].hand = HAND_RIGHT; player_roster[i].position = POS_SHORTSTOP; player_roster[i++].j_num = 7;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "ANTHONY VOLPE");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "NYY");
-    player_roster[i].batting_avg = 212; player_roster[i].hand = HAND_RIGHT; player_roster[i].position = POS_SHORTSTOP; player_roster[i++].j_num = 11;
-    
-    // Left Field (positions 40-49)
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "BRANDON NIMMO");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "NYM");
-    player_roster[i].batting_avg = 262; player_roster[i].hand = HAND_LEFT; player_roster[i].position = POS_LEFT_FIELD; player_roster[i++].j_num = 9;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "JASSON DOMÍNGUEZ");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "NYY");
-    player_roster[i].batting_avg = 257; player_roster[i].hand = HAND_BOTH; player_roster[i].position = POS_LEFT_FIELD; player_roster[i++].j_num = 24;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "JARREN DURAN");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "BOS");
-    player_roster[i].batting_avg = 256; player_roster[i].hand = HAND_LEFT; player_roster[i].position = POS_LEFT_FIELD; player_roster[i++].j_num = 16;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "IAN HAPP");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "CHC");
-    player_roster[i].batting_avg = 243; player_roster[i].hand = HAND_BOTH; player_roster[i].position = POS_LEFT_FIELD; player_roster[i++].j_num = 8;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "DYLAN CARLSON");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "BAL");
-    player_roster[i].batting_avg = 203; player_roster[i].hand = HAND_BOTH; player_roster[i].position = POS_LEFT_FIELD; player_roster[i++].j_num = 15;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "MICHAEL CONFORTO");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "LAD");
-    player_roster[i].batting_avg = 199; player_roster[i].hand = HAND_LEFT; player_roster[i].position = POS_LEFT_FIELD; player_roster[i++].j_num = 23;
-    
-    // Center Field (positions 50-59)
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "KEVIN ALCÁNTARA");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "CHC");
-    player_roster[i].batting_avg = 364; player_roster[i].hand = HAND_RIGHT; player_roster[i].position = POS_CENTER_FIELD; player_roster[i++].j_num = 13;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "ROMAN ANTHONY");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "BOS");
-    player_roster[i].batting_avg = 292; player_roster[i].hand = HAND_LEFT; player_roster[i].position = POS_CENTER_FIELD; player_roster[i++].j_num = 48;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "JOSÉ AZÓCAR");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "NYM");
-    player_roster[i].batting_avg = 278; player_roster[i].hand = HAND_RIGHT; player_roster[i].position = POS_CENTER_FIELD; player_roster[i++].j_num = 0;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "CODY BELLINGER");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "NYY");
-    player_roster[i].batting_avg = 272; player_roster[i].hand = HAND_LEFT; player_roster[i].position = POS_CENTER_FIELD; player_roster[i++].j_num = 35;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "ALEX CALL");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "LAD");
-    player_roster[i].batting_avg = 247; player_roster[i].hand = HAND_RIGHT; player_roster[i].position = POS_CENTER_FIELD; player_roster[i++].j_num = 12;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "DYLAN BEAVERS");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "BAL");
-    player_roster[i].batting_avg = 227; player_roster[i].hand = HAND_LEFT; player_roster[i].position = POS_CENTER_FIELD; player_roster[i++].j_num = 12;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "DANIEL JOHNSON");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "BAL");
-    player_roster[i].batting_avg = 208; player_roster[i].hand = HAND_LEFT; player_roster[i].position = POS_CENTER_FIELD; player_roster[i++].j_num = 56;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "COLTON COWSER");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "BAL");
-    player_roster[i].batting_avg = 196; player_roster[i].hand = HAND_LEFT; player_roster[i].position = POS_CENTER_FIELD; player_roster[i++].j_num = 17;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "OWEN CAISSIE");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "CHC");
-    player_roster[i].batting_avg = 192; player_roster[i].hand = HAND_LEFT; player_roster[i].position = POS_CENTER_FIELD; player_roster[i++].j_num = 19;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "ESTEURY RUIZ");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "LAD");
-    player_roster[i].batting_avg = 190; player_roster[i].hand = HAND_RIGHT; player_roster[i].position = POS_CENTER_FIELD; player_roster[i++].j_num = 27;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "JHOSTYNXON GARCÍA");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "BOS");
-    player_roster[i].batting_avg = 143; player_roster[i].hand = HAND_RIGHT; player_roster[i].position = POS_CENTER_FIELD; player_roster[i++].j_num = 0;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "AUSTIN SLATER");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "NYY");
-    player_roster[i].batting_avg = 120; player_roster[i].hand = HAND_RIGHT; player_roster[i].position = POS_CENTER_FIELD; player_roster[i++].j_num = 29;
-    
-    // Right Field (positions 60-69)
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "AARON JUDGE");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "NYY");
-    player_roster[i].batting_avg = 331; player_roster[i].hand = HAND_RIGHT; player_roster[i].position = POS_RIGHT_FIELD; player_roster[i++].j_num = 99;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "RAMÓN LAUREANO");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "BAL");
-    player_roster[i].batting_avg = 290; player_roster[i].hand = HAND_RIGHT; player_roster[i].position = POS_RIGHT_FIELD; player_roster[i++].j_num = 12;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "JEREMIAH JACKSON");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "BAL");
-    player_roster[i].batting_avg = 276; player_roster[i].hand = HAND_RIGHT; player_roster[i].position = POS_RIGHT_FIELD; player_roster[i++].j_num = 82;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "KYLE TUCKER");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "CHC");
-    player_roster[i].batting_avg = 266; player_roster[i].hand = HAND_LEFT; player_roster[i].position = POS_RIGHT_FIELD; player_roster[i++].j_num = 30;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "JUAN SOTO");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "NYM");
-    player_roster[i].batting_avg = 263; player_roster[i].hand = HAND_LEFT; player_roster[i].position = POS_RIGHT_FIELD; player_roster[i++].j_num = 22;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "TEOSCAR HERNÁNDEZ");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "LAD");
-    player_roster[i].batting_avg = 247; player_roster[i].hand = HAND_RIGHT; player_roster[i].position = POS_RIGHT_FIELD; player_roster[i++].j_num = 37;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "WILYER ABREU");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "BOS");
-    player_roster[i].batting_avg = 247; player_roster[i].hand = HAND_LEFT; player_roster[i].position = POS_RIGHT_FIELD; player_roster[i++].j_num = 52;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "TYLER O'NEILL");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "BAL");
-    player_roster[i].batting_avg = 199; player_roster[i].hand = HAND_RIGHT; player_roster[i].position = POS_RIGHT_FIELD; player_roster[i++].j_num = 9;
-    
-    // Catcher (positions 70-79)
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "VIDAL BRUJÁN");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "BAL");
-    player_roster[i].batting_avg = 1000; player_roster[i].hand = HAND_BOTH; player_roster[i].position = POS_CATCHER; player_roster[i++].j_num = 40;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "WILL SMITH");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "LAD");
-    player_roster[i].batting_avg = 296; player_roster[i].hand = HAND_RIGHT; player_roster[i].position = POS_CATCHER; player_roster[i++].j_num = 16;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "MIGUEL AMAYA");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "CHC");
-    player_roster[i].batting_avg = 281; player_roster[i].hand = HAND_RIGHT; player_roster[i].position = POS_CATCHER; player_roster[i++].j_num = 9;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "ANDY PAGES");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "LAD");
-    player_roster[i].batting_avg = 272; player_roster[i].hand = HAND_RIGHT; player_roster[i].position = POS_CATCHER; player_roster[i++].j_num = 44;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "FRANCISCO ALVAREZ");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "NYM");
-    player_roster[i].batting_avg = 256; player_roster[i].hand = HAND_RIGHT; player_roster[i].position = POS_CATCHER; player_roster[i++].j_num = 4;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "CEDDANNE RAFAELA");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "BOS");
-    player_roster[i].batting_avg = 249; player_roster[i].hand = HAND_RIGHT; player_roster[i].position = POS_CATCHER; player_roster[i++].j_num = 3;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "CARSON KELLY");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "CHC");
-    player_roster[i].batting_avg = 249; player_roster[i].hand = HAND_RIGHT; player_roster[i].position = POS_CATCHER; player_roster[i++].j_num = 15;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "PETE CROW-ARMSTRONG");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "CHC");
-    player_roster[i].batting_avg = 247; player_roster[i].hand = HAND_LEFT; player_roster[i].position = POS_CATCHER; player_roster[i++].j_num = 4;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "CARLOS NARVÁEZ");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "BOS");
-    player_roster[i].batting_avg = 241; player_roster[i].hand = HAND_RIGHT; player_roster[i].position = POS_CATCHER; player_roster[i++].j_num = 75;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "TRENT GRISHAM");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "NYY");
-    player_roster[i].batting_avg = 235; player_roster[i].hand = HAND_LEFT; player_roster[i].position = POS_CATCHER; player_roster[i++].j_num = 12;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "GARY SÁNCHEZ");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "BAL");
-    player_roster[i].batting_avg = 231; player_roster[i].hand = HAND_RIGHT; player_roster[i].position = POS_CATCHER; player_roster[i++].j_num = 99;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "CEDRIC MULLINS");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "BAL");
-    player_roster[i].batting_avg = 229; player_roster[i].hand = HAND_LEFT; player_roster[i].position = POS_CATCHER; player_roster[i++].j_num = 31;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "LUIS TORRENS");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "NYM");
-    player_roster[i].batting_avg = 226; player_roster[i].hand = HAND_RIGHT; player_roster[i].position = POS_CATCHER; player_roster[i++].j_num = 13;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "BEN RORTVEDT");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "LAD");
-    player_roster[i].batting_avg = 224; player_roster[i].hand = HAND_LEFT; player_roster[i].position = POS_CATCHER; player_roster[i++].j_num = 47;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "TYRONE TAYLOR");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "NYM");
-    player_roster[i].batting_avg = 223; player_roster[i].hand = HAND_RIGHT; player_roster[i].position = POS_CATCHER; player_roster[i++].j_num = 15;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "AUSTIN WELLS");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "NYY");
-    player_roster[i].batting_avg = 219; player_roster[i].hand = HAND_LEFT; player_roster[i].position = POS_CATCHER; player_roster[i++].j_num = 28;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "J.C. ESCARRA");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "NYY");
-    player_roster[i].batting_avg = 202; player_roster[i].hand = HAND_LEFT; player_roster[i].position = POS_CATCHER; player_roster[i++].j_num = 25;
-    
-    strcpy_s(player_roster[i].name, sizeof(player_roster[i].name), "CONNOR WONG");
-    player_roster[i].year = 2025; strcpy_s(player_roster[i].team, sizeof(player_roster[i].team), "BOS");
-    player_roster[i].batting_avg = 190; player_roster[i].hand = HAND_RIGHT; player_roster[i].position = POS_CATCHER; player_roster[i++].j_num = 12;
-    
+idx=0;
+// First Base
+P("MOISÉS BALLESTEROS",2025,"CHC",298,'L',POS_FIRST_BASE,25);
+P("FREDDIE FREEMAN",2025,"LAD",295,'L',POS_FIRST_BASE,5);
+P("RYAN O'HEARN",2025,"BAL",283,'L',POS_FIRST_BASE,32);
+P("SHOHEI OHTANI",2025,"LAD",282,'L',POS_FIRST_BASE,17);
+P("NATHANIEL LOWE",2025,"BOS",280,'L',POS_FIRST_BASE,37);
+P("PAUL GOLDSCHMIDT",2025,"NYY",274,'R',POS_FIRST_BASE,48);
+P("GIANCARLO STANTON",2025,"NYY",273,'R',POS_FIRST_BASE,27);
+P("PETE ALONSO",2025,"NYM",272,'R',POS_FIRST_BASE,20);
+P("RAFAEL DEVERS",2025,"BOS",272,'L',POS_FIRST_BASE,11);
+P("STARLING MARTE",2025,"NYM",270,'R',POS_FIRST_BASE,6);
+P("ROB REFSNYDER",2025,"BOS",269,'R',POS_FIRST_BASE,30);
+P("MICHAEL BUSCH",2025,"CHC",261,'L',POS_FIRST_BASE,29);
+P("BEN RICE",2025,"NYY",255,'L',POS_FIRST_BASE,22);
+P("EDDIE ROSARIO",2025,"LAD",250,'L',POS_FIRST_BASE,0);
+P("RYAN MOUNTCASTLE",2025,"BAL",250,'R',POS_FIRST_BASE,6);
+P("SEIYA SUZUKI",2025,"CHC",245,'R',POS_FIRST_BASE,27);
+P("JESSE WINKER",2025,"NYM",229,'L',POS_FIRST_BASE,3);
+P("COBY MAYO",2025,"BAL",217,'R',POS_FIRST_BASE,16);
+// Second Base
+P("ROMY GONZÁLEZ",2025,"BOS",305,'R',POS_SECOND_BASE,0);
+P("AMED ROSARIO",2025,"NYY",303,'R',POS_SECOND_BASE,14);
+P("NICO HOERNER",2025,"CHC",297,'R',POS_SECOND_BASE,2);
+P("NATE EATON",2025,"BOS",296,'R',POS_SECOND_BASE,40);
+P("HYESEONG KIM",2025,"LAD",280,'L',POS_SECOND_BASE,6);
+P("DJ LEMAHIEU",2025,"NYY",266,'R',POS_SECOND_BASE,26);
+P("JOSÉ CABALLERO",2025,"NYY",266,'R',POS_SECOND_BASE,72);
+P("JORDAN WESTBURG",2025,"BAL",265,'R',POS_SECOND_BASE,11);
+P("MIGUEL ROJAS",2025,"LAD",262,'R',POS_SECOND_BASE,72);
+P("NICK SOGARD",2025,"BOS",260,'B',POS_SECOND_BASE,20);
+P("JEFF MCNEIL",2025,"NYM",243,'L',POS_SECOND_BASE,1);
+P("JACKSON HOLLIDAY",2025,"BAL",242,'L',POS_SECOND_BASE,7);
+P("LUISANGEL ACUÑA",2025,"NYM",234,'R',POS_SECOND_BASE,2);
+P("TOMMY EDMAN",2025,"LAD",225,'B',POS_SECOND_BASE,25);
+P("VIDAL BRUJÁN",2025,"CHC",222,'B',POS_SECOND_BASE,0);
+P("GAGE WORKMAN",2025,"CHC",214,'L',POS_SECOND_BASE,25);
+P("JORGE MATEO",2025,"BAL",177,'R',POS_SECOND_BASE,3);
+// Third Base
+P("ALEX BREGMAN",2025,"BOS",273,'R',POS_THIRD_BASE,2);
+P("BRETT BATY",2025,"NYM",254,'L',POS_THIRD_BASE,7);
+P("EMMANUEL RIVERA",2025,"BAL",250,'R',POS_THIRD_BASE,26);
+P("RAMÓN URÍAS",2025,"BAL",248,'R',POS_THIRD_BASE,29);
+P("OSWALDO CABRERA",2025,"NYY",243,'B',POS_THIRD_BASE,95);
+P("MAX MUNCY",2025,"LAD",243,'L',POS_THIRD_BASE,13);
+P("MARK VIENTOS",2025,"NYM",233,'R',POS_THIRD_BASE,27);
+P("MARCELO MAYER",2025,"BOS",228,'L',POS_THIRD_BASE,39);
+P("RONNY MAURICIO",2025,"NYM",226,'B',POS_THIRD_BASE,10);
+P("MATT SHAW",2025,"CHC",226,'R',POS_THIRD_BASE,6);
+P("JON BERTI",2025,"CHC",210,'R',POS_THIRD_BASE,5);
+P("RYAN MCMAHON",2025,"NYY",208,'L',POS_THIRD_BASE,19);
+P("OSWALD PERAZA",2025,"NYY",152,'R',POS_THIRD_BASE,18);
+P("VIMAEL MACHÍN",2025,"BAL",91,'L',POS_THIRD_BASE,65);
+P("BUDDY KENNEDY",2025,"LAD",59,'R',POS_THIRD_BASE,46);
+// Shortstop
+P("GUNNAR HENDERSON",2025,"BAL",274,'L',POS_SHORTSTOP,2);
+P("FRANCISCO LINDOR",2025,"NYM",267,'B',POS_SHORTSTOP,12);
+P("TREVOR STORY",2025,"BOS",263,'R',POS_SHORTSTOP,10);
+P("MOOKIE BETTS",2025,"LAD",258,'R',POS_SHORTSTOP,50);
+P("DANSBY SWANSON",2025,"CHC",244,'R',POS_SHORTSTOP,7);
+P("ANTHONY VOLPE",2025,"NYY",212,'R',POS_SHORTSTOP,11);
+// Left Field
+P("BRANDON NIMMO",2025,"NYM",262,'L',POS_LEFT_FIELD,9);
+P("JASSON DOMÍNGUEZ",2025,"NYY",257,'B',POS_LEFT_FIELD,24);
+P("JARREN DURAN",2025,"BOS",256,'L',POS_LEFT_FIELD,16);
+P("IAN HAPP",2025,"CHC",243,'B',POS_LEFT_FIELD,8);
+P("DYLAN CARLSON",2025,"BAL",203,'B',POS_LEFT_FIELD,15);
+P("MICHAEL CONFORTO",2025,"LAD",199,'L',POS_LEFT_FIELD,23);
+// Center Field
+P("KEVIN ALCÁNTARA",2025,"CHC",364,'R',POS_CENTER_FIELD,13);
+P("ROMAN ANTHONY",2025,"BOS",292,'L',POS_CENTER_FIELD,48);
+P("JOSÉ AZÓCAR",2025,"NYM",278,'R',POS_CENTER_FIELD,0);
+P("CODY BELLINGER",2025,"NYY",272,'L',POS_CENTER_FIELD,35);
+P("ALEX CALL",2025,"LAD",247,'R',POS_CENTER_FIELD,12);
+P("DYLAN BEAVERS",2025,"BAL",227,'L',POS_CENTER_FIELD,12);
+P("DANIEL JOHNSON",2025,"BAL",208,'L',POS_CENTER_FIELD,56);
+P("COLTON COWSER",2025,"BAL",196,'L',POS_CENTER_FIELD,17);
+P("OWEN CAISSIE",2025,"CHC",192,'L',POS_CENTER_FIELD,19);
+P("ESTEURY RUIZ",2025,"LAD",190,'R',POS_CENTER_FIELD,27);
+P("JHOSTYNXON GARCÍA",2025,"BOS",143,'R',POS_CENTER_FIELD,0);
+P("AUSTIN SLATER",2025,"NYY",120,'R',POS_CENTER_FIELD,29);
+// Right Field
+P("AARON JUDGE",2025,"NYY",331,'R',POS_RIGHT_FIELD,99);
+P("RAMÓN LAUREANO",2025,"BAL",290,'R',POS_RIGHT_FIELD,12);
+P("JEREMIAH JACKSON",2025,"BAL",276,'R',POS_RIGHT_FIELD,82);
+P("KYLE TUCKER",2025,"CHC",266,'L',POS_RIGHT_FIELD,30);
+P("JUAN SOTO",2025,"NYM",263,'L',POS_RIGHT_FIELD,22);
+P("TEOSCAR HERNÁNDEZ",2025,"LAD",247,'R',POS_RIGHT_FIELD,37);
+P("WILYER ABREU",2025,"BOS",247,'L',POS_RIGHT_FIELD,52);
+P("TYLER O'NEILL",2025,"BAL",199,'R',POS_RIGHT_FIELD,9);
+// Catcher
+P("VIDAL BRUJÁN",2025,"BAL",1000,'B',POS_CATCHER,40);
+P("WILL SMITH",2025,"LAD",296,'R',POS_CATCHER,16);
+P("MIGUEL AMAYA",2025,"CHC",281,'R',POS_CATCHER,9);
+P("ANDY PAGES",2025,"LAD",272,'R',POS_CATCHER,44);
+P("FRANCISCO ALVAREZ",2025,"NYM",256,'R',POS_CATCHER,4);
+P("CEDDANNE RAFAELA",2025,"BOS",249,'R',POS_CATCHER,3);
+P("CARSON KELLY",2025,"CHC",249,'R',POS_CATCHER,15);
+P("PETE CROW-ARMSTRONG",2025,"CHC",247,'L',POS_CATCHER,4);
+P("CARLOS NARVÁEZ",2025,"BOS",241,'R',POS_CATCHER,75);
+P("TRENT GRISHAM",2025,"NYY",235,'L',POS_CATCHER,12);
+P("GARY SÁNCHEZ",2025,"BAL",231,'R',POS_CATCHER,99);
+P("CEDRIC MULLINS",2025,"BAL",229,'L',POS_CATCHER,31);
+P("LUIS TORRENS",2025,"NYM",226,'R',POS_CATCHER,13);
+P("BEN RORTVEDT",2025,"LAD",224,'L',POS_CATCHER,47);
+P("TYRONE TAYLOR",2025,"NYM",223,'R',POS_CATCHER,15);
+P("AUSTIN WELLS",2025,"NYY",219,'L',POS_CATCHER,28);
+P("J.C. ESCARRA",2025,"NYY",202,'L',POS_CATCHER,25);
+P("CONNOR WONG",2025,"BOS",190,'R',POS_CATCHER,12);
 }
