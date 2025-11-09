@@ -1,90 +1,355 @@
-![IBM 1620](ibm.png "IBM 1620")
+# BBC Baseball Simulation and Demonstrator
 
-## Running the 1960s Burgeson baseball game in an IBM 1620 emulator
+A modern C implementation of Paul R. Burgeson's 1961 baseball simulation game, originally written for the IBM 1620 computer. This version has been rewritten for Windows console (conhost terminal) and compiles with Microsoft Visual C++ (MSVC).
 
-You will need either [OpenSIMH](https://opensimh.org/) or a recent version of [SIMH](http://simh.trailing-edge.com/). Alternatively, my own [IBM 1620 emulator in Python](https://github.com/mdoege/Py1620) can also run the baseball game, so that is another option.
+## About the Original Game
 
-When using SIMH:
+The BBC (Burgeson Baseball Computer) Baseball Simulation was created in 1961 to demonstrate the simulation capabilities of early computers. The program allows a human player to compete against the computer by selecting all-star baseball teams from a roster of 90 legendary players, each represented by their best season statistics.
 
-* Get the i1620 binary for your platform:
-    * Windows: Download SIMH and extract the i1620 binary: [Windows builds of SIMH](https://github.com/simh/Win32-Development-Binaries)
-    * Linux, Mac: Build SIMH from source. Use ```make i1620``` to only build that binary.
-* Run ```i1620 base.simh```. The game should start. Enter date, time and the names of nine players (or just a random first letter instead). Then the simulation will run.
-* To quit SIMH, press Ctrl-E and then enter q and press Return.
+**Original Author**: Paul R. Burgeson, Youngstown, Ohio  
+**Original Date**: January 1961  
+**Original Platform**: IBM 1620 (20K memory)  
+**Original Language**: Machine code
 
-### Roster of players
+## Features
 
-The game includes a roster of 90 players:
+- **90 All-Star Players**: Historical baseball legends from 1884-1953
+- **Full Game Simulation**: Complete 9-inning games (or more if tied)
+- **Realistic Baseball Mechanics**:
+  - Singles, doubles, triples, home runs
+  - Ground outs, fly outs, line outs, strikeouts
+  - Walks, errors, fielder's choices
+  - Double plays, triple plays
+  - Base stealing
+  - Sacrifice flies
+  - Runner advancement
+
+- **Random Number Generation**: Two separate RNG streams initialized by date/time input
+- **Batting Averages**: Each player's historical batting average affects hit probability
+- **Handedness**: Left, right, and switch hitters represented
+
+## Player Roster
+
+The game includes 90 all-star players organized by position:
+
+### First Base
+Trosky, Foxx, Benson, Mize, Gehrig, Anson, Terry, York, Sisler, Brouthers
+
+### Second Base
+Lajoie, E Collins, C Burg, Mack, Gordon, Lazzeri, Frisch, Hornsby, Gehringer, Robinson
+
+### Third Base
+Keltner, J Collins, J Burg, Baker, Hack, Groh, Traynor, Kell, McGraw, Kamm
+
+### Shortstop
+Boudreau, Sewell, Crosetti, Cronin, Tumblin, Jennings, Wagner, Appling, Vaughan, Travis
+
+### Left Field
+P Waner, Radcliff, Medwick, Ruth, Simmons, Heilmann, Duffy, Musial, Wheat, Williams
+
+### Center Field
+DiMaggio, Reiser, Keller, Averill, Speaker, Jackson, Cobb, Rice, Henrich, O Rourke
+
+### Right Field
+L Waner, Burkett, Herman, Crawford, Hamilton, Greenberg, O Doul, Delahanty, Cuyler, Ott
+
+### Catcher
+Hayes, Cochrane, Danning, Dickey, Hartnett, Berra, M Burg, Lombardi, Hegan, Kelly
+
+### Pitcher
+Radbourne, Grove, Feller, Spahn, D Dean, Young, Newhouser, Johnson, Hubbell, Ruffing
+
+## System Requirements
+
+- **Operating System**: Windows 10 or later
+- **Compiler**: Microsoft Visual C++ (MSVC) - part of Visual Studio 2019 or later
+- **Console**: Windows Command Prompt or PowerShell
+
+## Building the Game
+
+### Prerequisites
+
+You need to have Microsoft Visual C++ compiler installed. You can get it through:
+- **Visual Studio 2022** (Community Edition is free)
+- **Visual Studio 2019**
+- **Build Tools for Visual Studio** (command-line only, smaller download)
+
+### Compilation Steps
+
+#### Option 1: Using the Build Script (Easiest)
+
+1. Open "Developer Command Prompt for VS 2022" (or your VS version)
+2. Navigate to the source directory:
+   ```
+   cd path\to\baseball
+   ```
+3. Run the build script:
+   ```
+   build.bat
+   ```
+
+#### Option 2: Manual Compilation
+
+Open "Developer Command Prompt for VS 2022" and run:
+
+```batch
+cl /W4 /O2 /Fe:baseball.exe baseball.c players.c /link /SUBSYSTEM:CONSOLE
 ```
-ANSON           DELAHANTY       HEGAN           LOMBARDI        RUFFING
-APPLING         DICKEY          HEILMANN        L WANER         RUTH
-AVERILL         DIMAGGIO        HENRICH         MACK            SEWELL
-BAKER           DUFFY           HERMAN          M. BURG         SIMMONS
-BENSON          E COLLINS       HORNSBY         MCGRAW          SISLER
-BERRA           FELLER          HUBBELL         MEDWICK         SPAHN
-BOUDREAU        FOXX            JACKSON         MIZE            SPEAKER
-BROUTHERS       FRISCH          J. BURG         MUSIAL          TERRY
-BURKETT         GEHRIG          J COLLINS       NEWHOUSER       TRAVIS
-C. BURG         GEHRINGER       JENNINGS        O DOUL          TRAYNOR
-COBB            GORDON          JOHNSON         O ROURKE        TROSKY
-COCHRANE        GREENBERG       KAMM            OTT             TUMBLIN
-CRAWFORD        GROH            KEELER          P WANER         VAUGHAN
-CRONIN          GROVE           KELL            RADBOURNE       WAGNER
-CROSETTI        HACK            KELLY           RADCLIFF        WHEAT
-CUYLER          HAMILTON        KELTNER         REISER          WILLIAMS
-DANNING         HARTNETT        LAJOIE          RICE            YORK
-D DEAN          HAYES           LAZZERI         ROBINSON        YOUNG
+
+**Compiler flags explained**:
+- `/W4` - Warning level 4 (high)
+- `/O2` - Optimize for speed
+- `/Fe:baseball.exe` - Output executable name
+- `/link /SUBSYSTEM:CONSOLE` - Console application
+
+### Alternative: Using Visual Studio IDE
+
+1. Create a new "Console App" project
+2. Add all `.c` and `.h` files to the project
+3. Build -> Build Solution (F7)
+
+## Running the Game
+
+Simply run the executable:
+
+```
+baseball.exe
 ```
 
-### IBM 1620 software catalog entry (1971)
+Or double-click `baseball.exe` in Windows Explorer.
 
-![catalog](software_catalog_1971.png "1971 software catalog")
+## How to Play
 
-### Files
+### 1. Game Initialization
 
-#### Games
+When you start the game, you'll be prompted for:
+- **Today's Date**: Enter any format (e.g., "111" or "11/09/2024")
+- **Current Time**: Enter any format (e.g., "343" or "3:43")
 
-* Baseball
-    * 11.0.032_BBC_Baseball_Simulation_and_Demonstrator.pdf: *1620 General Program Library: B B C Baseball Simulation and Demonstrator*
-    * 1620_11.0.032_bbc_baseball.crd: Baseball game (CRD format)
-    * 1620_baseball.pdf: Original baseball game instructions
-    * base.log.txt: Log of a sample program run
-    * base.simh: Baseball game emulator script
-    * base.txt: Baseball game (newer version 11.0.032; TXT format)
-    * bbc1.txt: Baseball game (older version "BBC VERSION 1K 8/14/61" 11.0.007, same as the sample run in the manual; TXT format)
-* Tic-tac-toe (2D)
-    * 1620_11.0.013_tic_tac_toe.crd: Tic-tac-toe game (CRD format)
-    * tic.simh: Tic-tac-toe game (emulator script)
-    * tic.txt: Tic-tac-toe game on a 3x3 grid (TXT format)
-* Tic-tac-toe (3D)
-    * tic3d.simh: 3D tic-tac-toe game (emulator script)
-    * tic3d.txt: 3D tic-tac-toe game on a 4x4x4 grid (TXT format)
+These inputs seed the random number generators to ensure different games each time.
 
-#### GOTRAN
+### 2. Team Selection
 
-GOTRAN is a FORTRAN-like interactive programming language for the IBM 1620. The user enters a program and then after a final "END" line, the machine halts. Starting the computer with "c" runs the GOTRAN program. GOTRAN features some extra commands not present in standard FORTRAN, such as PLOT.
+**Visiting Team (You)**: Select 9 players in batting order
+- Type each player's name and press Enter
+- Names are case-insensitive
+- Partial names that match exactly are accepted
+- If you enter an invalid name, you'll see "NON-VALID PLAYER. RETRY."
 
-* C26-5594-1_IBM_1620_GOTRAN_Interpretive_Programming_System_1961.pdf: GOTRAN manual
-* gotran.simh: emulator script
-* gotran.txt: card deck
-* gotran_demo.txt: GOTRAN demo run (see Fig. 16 in manual)
+**Example**:
+```
+>RUTH
+>CROSETTI
+>HENRICH
+>HEGAN
+>TROSKY
+>GORDON
+>WAGNER
+>WILLIAMS
+>SPEAKER
+```
 
-#### Other files
+**Home Team (Computer)**: The computer randomly selects 9 players from the remaining 81 players.
 
-* cb2asc.py: Convert CHM column binary format to SIMH ASCII
-* crd2asc.py: Convert CRD binary format to SIMH ASCII
-* crd_format_hex.txt: Explanation of CRD file encoding (two bytes per punched card character)
-* dis1620.py: Disassemble 1620 TXT file
-* X26-5743-2_1620_Model_1_Reference_Card.pdf: IBM 1620 Model 1 reference card
-* X26-5852-2_1620_Model_2_Reference_Card.pdf: IBM 1620 Model 2 reference card
+### 3. Game Play
 
-### YouTube videos about the 1620 baseball game
+The game automatically simulates each at-bat with play-by-play commentary:
 
-* [The Story of the First Baseball Video Game Ever Made | Friday Night Arcade](https://www.youtube.com/watch?v=IbH7UZ83kzY)
-* IBM 1620 Software Library: at <https://www.youtube.com/watch?v=N12pQBiRd7A&t=2208> and later in the same video at <https://www.youtube.com/watch?v=N12pQBiRd7A&t=3813>
+```
+RUTH UP  DOUBLE OVER THIRD
+CROSETTI UP  LONG FLY TO L CENTR RUNNER ON 3RD
+HENRICH UP  SINGLE OVER FIRST RUNNER SCORES
+```
 
-### Links
+### 4. Game End
 
-* [IBM 1620 games (CRD format)](http://bitsavers.informatik.uni-stuttgart.de/bits/IBM/1620/games/) from Bitsavers
-* [IBM 1620 image](https://commons.wikimedia.org/wiki/File:IBM_1620.jpg) by Todd Dailey, CC BY-SA 2.0 <https://creativecommons.org/licenses/by-sa/2.0>, via Wikimedia Commons
+After 9 innings (or more if tied), the final score is displayed:
 
+```
+GAME COMPLETED. TOTALS
+
+VISITORS        16  23  01
+HOMETEAM        14  21  01
+```
+
+Format: Runs, Hits, Errors
+
+## Game Mechanics
+
+### Hit Probability
+
+Base probability = (Batting Average + 50) / 1000
+
+For example:
+- Babe Ruth (.393) has ~44.3% chance to get a hit per at-bat
+- Ty Cobb (.420) has ~47.0% chance to get a hit per at-bat
+
+### Play Distribution (approximate)
+
+**Hits**:
+- Home Run: ~5%
+- Triple: ~7%
+- Double: ~18%
+- Single: ~70%
+
+**Outs**:
+- Double Play: ~3% (when applicable)
+- Sacrifice Fly: ~5% (when applicable)
+- Strikeout: ~15%
+- Walk: ~5%
+- Error: ~5%
+- Other outs: ~67%
+
+### Special Plays
+
+- **Base Stealing**: ~7% chance when runner on first with < 2 outs
+- **Double Plays**: Can only occur with runner on base and < 2 outs
+- **Sacrifice Flies**: Only with runner on 2nd/3rd and < 2 outs
+- **Walks**: Runner advances if forced
+
+## Tips for Playing
+
+1. **High Average Hitters**: Select players with batting averages over .350 for better offense
+2. **Legendary Players**: 
+   - Best hitters: Cobb (.420), Lajoie (.426), Duffy (.440)
+   - Power hitters: Ruth, Foxx, Gehrig
+   - Consistent hitters: Wagner, Williams, Speaker
+
+3. **Team Balance**: Mix left and right-handed batters
+4. **Different Seeds**: Enter different dates/times for varied gameplay
+
+## Technical Notes
+
+### Random Number Generation
+
+The game uses two Linear Congruential Generators (LCGs) that are XORed together:
+- **Generator 1**: Multiplier = 1103515245, Increment = 12345
+- **Generator 2**: Multiplier = 69069, Increment = 1
+
+Seeds are initialized from:
+1. System time
+2. Characters from date string
+3. Characters from time string
+4. Selected player statistics
+
+### Code Structure
+
+- `baseball.h` - Header with structures and function declarations
+- `baseball.c` - Main game logic and simulation engine
+- `players.c` - Player database (90 players with statistics)
+- `build.bat` - MSVC build script
+
+### Differences from Original
+
+This modern implementation maintains the spirit of the original while adapting to modern systems:
+
+**Retained**:
+- All 90 original players with their statistics
+- Game mechanics and play types
+- Random number generation approach
+- Play-by-play output style
+
+**Updated**:
+- C language instead of IBM 1620 machine code
+- Windows console instead of typewriter output
+- Modern string handling (strcpy_s instead of strcpy)
+- Structured code with functions instead of goto-heavy machine code
+- ANSI C standards compliance
+
+## Example Game Output
+
+```
+========================================
+  BBC BASEBALL SIMULATION (1961)
+  Burgeson Baseball Computer
+========================================
+
+TODAYS DATE IS >11/09/2024
+
+THE TIME IS >3:43 PM
+
+ENTER YOUR LINEUP BELOW
+
+VISITORS
+
+NAME       TEAM AVG BATS
+
+>RUTH
+        LF 1923 YANKS              .393  L
+>CROSETTI
+        SS 1936 YANKS              .288  R
+...
+
+HOME TEAM
+
+NAME       TEAM AVG BATS
+
+YORK       1B 1940 DETROIT         .316  R
+E COLLINS  2B 1920 W SOX           .369  L
+...
+
+RUTH UP  DOUBLE OVER THIRD
+CROSETTI UP  LONG FLY TO L CENTR RUNNER ON 3RD
+HENRICH UP  SINGLE OVER FIRST RUNNER SCORES
+...
+
+3 RUNS  3 HITS  0 ERRORS
+
+END OF INNING 1    SCORE 3 0
+```
+
+## Known Limitations
+
+1. The home team continues playing the bottom of the 9th even when already ahead (this matches original behavior)
+2. Pitcher effectiveness is not modeled (all pitchers equal)
+3. No defensive ratings (errors are random)
+4. No player substitutions during game
+5. No save/load game functionality
+
+## Historical Context
+
+This program demonstrates early computer gaming (1961) and the use of computers for sports simulation. The IBM 1620 was a decimal-based computer with 20,000 digits of memory, and this program used all available memory.
+
+The original program was coded directly in machine language over several months in early 1961 and was extensively tested over 300+ games.
+
+## Credits
+
+**Original Program**: Paul R. Burgeson (1961)  
+**Modern C Port**: 2024  
+**Based on**: IBM 1620 General Program Library 11.0.032
+
+## License
+
+This is a recreation of historical software for educational and entertainment purposes.
+
+## Troubleshooting
+
+### "cl is not recognized..."
+- You need to open "Developer Command Prompt for VS" not regular Command Prompt
+- Or run `vcvarsall.bat` to set up the environment
+
+### Compilation Errors
+- Ensure all three files (.h and two .c files) are in the same directory
+- Check that you're using MSVC, not another compiler
+- Try with `/std:c11` flag if needed
+
+### Game Crashes
+- This shouldn't happen, but if it does, report the player names you entered
+- Try running in a regular Command Prompt window
+
+## Contributing
+
+Feel free to enhance this recreation:
+- Add defensive ratings
+- Implement pitcher effectiveness
+- Add statistics tracking
+- Create a GUI version
+- Port to other platforms
+
+## Contact
+
+For issues with this modern implementation, please create an issue in the repository.
+
+---
+
+**Enjoy playing baseball like it's 1961!** 🎮⚾

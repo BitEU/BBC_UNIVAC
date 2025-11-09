@@ -1,8 +1,0 @@
-
-; only play a single game, then choose new players
-d sw3 1
-
-at cdr base.txt
-
-boot cdr
-

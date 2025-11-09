@@ -1,8 +1,0 @@
-at cdr tic3d.txt
-
-boot cdr
-
-echo
-echo Enter "c" to start the machine when it halts!
-echo
-
