@@ -9,6 +9,10 @@ echo   BBC Baseball - Unified Build Script
 echo ========================================
 echo.
 
+set COMPILER=
+set UNIVAC_BUILD=
+set PLAYERS=
+
 REM ============================================================================
 REM STEP 1: SELECT PLATFORM
 REM ============================================================================
@@ -33,7 +37,6 @@ REM ============================================================================
 REM STEP 2: SELECT COMPILER (Windows only)
 REM ============================================================================
 :SELECT_COMPILER
-set COMPILER=
 echo.
 echo Please select your compiler:
 echo   Press ENTER or 1 for MinGW
@@ -51,7 +54,6 @@ REM ============================================================================
 REM STEP 3: SELECT PLAYER DATA
 REM ============================================================================
 :SELECT_PLAYERS
-set PLAYERS=
 echo.
 echo Please select player data:
 echo   Press ENTER or 1 for MLB League Players (players.c)
