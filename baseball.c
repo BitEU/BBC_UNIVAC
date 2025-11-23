@@ -1,8 +1,22 @@
 /*
- * BBC Baseball Simulation and Demonstrator
- * Main game implementation
+ * Program Name: BBC_UNIVAC 
+ * Program Release Year: 2025
+ * Program Author: Steven S.
+ * Program Link: https://github.com/BitEU/BBC_UNIVAC
+ * 
+ * Original Name: BBC Baseball Simulation and Demonstrator
+ * Original Release Year: 1961
+ * Original Author: Paul R. Burgeson
+ * Original Link: N/A, but a good article exists here https://www.baseballprospectus.com/news/article/72975/make-up-games-the-baseball-demonstrator-1961-video-game-review/
+ * Original System: IBM 1620
+ * 
+ * Rewrite Name: IBM1620-Baseball
+ * Rewrite Release Year: 2021
+ * Rewrite Author: mdoege
+ * Rewrite Link: https://github.com/mdoege/IBM1620-Baseball
+ *
+ * Major changes from rewrite: Ported to C and added Windows Console/UNIVAC 1219 support
  */
-
 #include "baseball.h"
 
 // Platform-specific string copy
